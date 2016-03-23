@@ -936,13 +936,13 @@ function init() {
   var mine = loadFromStorage();
   calcDependencies();
   drawFilter();
-  drawTheme();
+  //drawTheme();
   drawImport();
-  changeMode(false);
+  //changeMode(false);
   switchCate(category[0]);
   updateSize(mine);
   setupSearch();
-  refreshShoppingCart(null, null);
+ // refreshShoppingCart(null, null);
 
   global.float = $('table.mainTable');
   global.float.floatThead({
