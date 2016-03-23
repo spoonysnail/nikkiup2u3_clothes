@@ -797,8 +797,13 @@ function doImport() {
   }
   var updating = [];
   for (var i in clothes) {
-    if (clothes[i].type.mainType == type && mapping[clothes[i].id]) {
+    
+    if (clothes[i].type.mainType == type && mapping[clothes[i].id] && i<10) {
       updating.push(clothes[i].name);
+    }
+    if(i>10){
+      updating.push("等");
+      break;
     }
   }
   var names = updating.join(",");
