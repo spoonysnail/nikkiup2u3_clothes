@@ -119,25 +119,25 @@ function row(piece, isShoppingCart) {
   if (!global.isFilteringMode) {
     ret += td(/*piece.tmpScore*/piece.totalScore);
   }
-  if (isShoppingCart) {
-    ret += td(piece.name, '');
-  } else {
+  // if (isShoppingCart) {
+  //   ret += td(piece.name, '');
+  // } else {
     ret += clickableTd(piece);
-  }
+  //}
   var csv = piece.toCsv();
   for (var i in csv) {
     if(i<3 || i>12)
     ret += td(render(csv[i]), getStyle(csv[i]));
   }
   
-  if (isShoppingCart) {
-    // use id to detect if it is a fake clothes
-    if (piece.id) {
-      ret += td(removeShoppingCartButton(piece.type.type), '');
-    }
-  } else {
-    ret += td(shoppingCartButton(piece.type.mainType, piece.id), '');
-  }
+  // if (isShoppingCart) {
+  //   // use id to detect if it is a fake clothes
+  //   if (piece.id) {
+  //     ret += td(removeShoppingCartButton(piece.type.type), '');
+  //   }
+  // } else {
+  //   ret += td(shoppingCartButton(piece.type.mainType, piece.id), '');
+  // }
   return tr(ret);
 }
 
