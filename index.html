@@ -314,6 +314,16 @@
     <div class='announcement'>
       Nikki's wardrobe.<br/>
     </div>
+    <div id='filtersTop'>
+      <form name="filter_form">
+        <div>
+          <input type="checkbox" name="inventory" value="own" onClick="onChangeUiFilter()" checked />拥有
+          <span id='inventoryCount'> </span>
+          <input type="checkbox" name="inventory" value="missing" onClick="onChangeUiFilter()" checked /> 没有
+        </div>
+      </form>
+    </div>
+    
     <hr/>
     <hr>
     <div id='category_container'> 
