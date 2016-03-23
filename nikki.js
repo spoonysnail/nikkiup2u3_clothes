@@ -31,16 +31,6 @@ function thead(isShoppingCart, score) {
   <th class='category'>类别</th>\
   <th>编号</th>\
   <th>心级</th>\
-  <th>简约</th>\
-  <th>华丽</th>\
-  <th>可爱</th>\
-  <th>成熟</th>\
-  <th>活泼</th>\
-  <th>优雅</th>\
-  <th>清纯</th>\
-  <th>性感</th>\
-  <th>清凉</th>\
-  <th>保暖</th>\
   <th>特殊属性</th>\
   <th>来源</th>";
   if (!isShoppingCart) {
