@@ -738,19 +738,19 @@ function setFilters(level) {
   }
 }
 
-function drawTheme() {
-  var dropdown = $("#theme")[0];
-  var def = document.createElement('option');
-  def.text = '自定义关卡';
-  def.value = 'custom' 
-  dropdown.add(def);
-  for (var theme in allThemes) {
-    var option = document.createElement('option');
-    option.text = theme;
-    option.value = theme;
-    dropdown.add(option);
-  }
-}
+// function drawTheme() {
+//   var dropdown = $("#theme")[0];
+//   var def = document.createElement('option');
+//   def.text = '自定义关卡';
+//   def.value = 'custom' 
+//   dropdown.add(def);
+//   for (var theme in allThemes) {
+//     var option = document.createElement('option');
+//     option.text = theme;
+//     option.value = theme;
+//     dropdown.add(option);
+//   }
+// }
 
 function drawImport() {
   var dropdown = $("#importCate")[0];
