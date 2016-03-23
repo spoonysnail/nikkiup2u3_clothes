@@ -594,26 +594,26 @@ function filtering(criteria, filters) {
 
 function matches(c, criteria, filters) {
   // only filter by feature when filtering
-  if (global.isFilteringMode) {
-    for (var i in FEATURES) {
-      var f = FEATURES[i];
-      if (criteria[f] && criteria[f] * c[f][2] < 0) {
-        return false;
-      }
-    }
-  }
-  if (global.isFilteringMode && criteria.bonus) {
-    var matchedTag = false;
-    for (var i in criteria.bonus) {
-      if (tagMatcher(criteria.bonus[i].tagWhitelist, c)) {
-        matchedTag = true;
-        break;
-      }
-    }
-    if (!matchedTag) {
-      return false;
-    }
-  }
+  // if (global.isFilteringMode) {
+  //   for (var i in FEATURES) {
+  //     var f = FEATURES[i];
+  //     if (criteria[f] && criteria[f] * c[f][2] < 0) {
+  //       return false;
+  //     }
+  //   }
+  // }
+  // if (global.isFilteringMode && criteria.bonus) {
+  //   var matchedTag = false;
+  //   for (var i in criteria.bonus) {
+  //     if (tagMatcher(criteria.bonus[i].tagWhitelist, c)) {
+  //       matchedTag = true;
+  //       break;
+  //     }
+  //   }
+  //   if (!matchedTag) {
+  //     return false;
+  //   }
+  // }
   return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type.type];
 }
 
