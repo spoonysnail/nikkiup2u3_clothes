@@ -126,8 +126,10 @@ function row(piece, isShoppingCart) {
   }
   var csv = piece.toCsv();
   for (var i in csv) {
+    if(i<3 || i>12)
     ret += td(render(csv[i]), getStyle(csv[i]));
   }
+  
   if (isShoppingCart) {
     // use id to detect if it is a fake clothes
     if (piece.id) {
