@@ -490,24 +490,24 @@ function parseSafe(element, lowerbound, upperbound, def) {
 }
 
 function init() {
-  if (url().indexOf("ivangift") > 0) {
-    $(".announcement").append("By 玉人 and ip君, proof of our existence, and our memories. - Nov 2015");
-  }
-  var category = url("#category");
-  var pattern = url("#pattern");
+  // if (url().indexOf("ivangift") > 0) {
+  //   $(".announcement").append("By 玉人 and ip君, proof of our existence, and our memories. - Nov 2015");
+  // }
+  // var category = url("#category");
+  // var pattern = url("#pattern");
   processSources();
-  drawPreset();
-  loadMerchant();
-  drawCategory();
+  // drawPreset();
+  // loadMerchant();
+  // drawCategory();
   loadInventory();
-  if (patternSet[category]) {
-    $("#category").val(category);
-    changeCategory();
-    if (patternSet[category][pattern]) {
-      $("#pattern").val(pattern);
-      selectPattern();
-    }
-  }
+  // if (patternSet[category]) {
+  //   $("#category").val(category);
+  //   changeCategory();
+  //   if (patternSet[category][pattern]) {
+  //     $("#pattern").val(pattern);
+  //     selectPattern();
+  //   }
+  // }
 }
 
 function updateParam() {
