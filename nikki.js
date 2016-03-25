@@ -904,29 +904,29 @@ function moreLink(cate) {
 }
 
 function setupSearch() {
-  $('#searchitem').autoComplete({
-    minChars: 1,
-    cache: false,
-    source: function(term, suggest){
-      var matches = [];
-      for (var i in clothes) {
-        if (clothes[i].name.indexOf(term) >= 0 || clothes[i].id.indexOf(term) >= 0) {
-          matches.push(clothes[i]);
-        }
-        if (matches.length > 10) {
-          break;
-        }
-      }
-      suggest(matches);
-    },
-    renderItem: function (item, search) {
-      return "<div class='autocomplete-suggestion' data-type='" + item.type.mainType + "' data-id='" + item.id + "'>"
-          + item.type.type + " " + item.id + " " + item.name + "</div>";
-    },
-    onSelect: function(e, term, item){
-      addShoppingCart(item.data('type'), item.data('id'));
-    }
-  });
+  // $('#searchitem').autoComplete({
+  //   minChars: 1,
+  //   cache: false,
+  //   source: function(term, suggest){
+  //     var matches = [];
+  //     for (var i in clothes) {
+  //       if (clothes[i].name.indexOf(term) >= 0 || clothes[i].id.indexOf(term) >= 0) {
+  //         matches.push(clothes[i]);
+  //       }
+  //       if (matches.length > 10) {
+  //         break;
+  //       }
+  //     }
+  //     suggest(matches);
+  //   },
+  //   renderItem: function (item, search) {
+  //     return "<div class='autocomplete-suggestion' data-type='" + item.type.mainType + "' data-id='" + item.id + "'>"
+  //         + item.type.type + " " + item.id + " " + item.name + "</div>";
+  //   },
+  //   onSelect: function(e, term, item){
+  //     addShoppingCart(item.data('type'), item.data('id'));
+  //   }
+  // });
 }
 
 function init() {
