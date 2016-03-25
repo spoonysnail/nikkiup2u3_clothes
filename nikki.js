@@ -942,10 +942,10 @@ function init() {
  // refreshShoppingCart(null, null);
   processSources();
 
-  global.float = $('table.mainTable');
-  global.float.floatThead({
-    useAbsolutePositioning: false
-  });
+  // global.float = $('table.mainTable');
+  // global.float.floatThead({
+  //   useAbsolutePositioning: false
+  // });
   $("#summary").collapse({});
 }
 $(document).ready(function() {
