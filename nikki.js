@@ -677,11 +677,11 @@ function changeMode(isFiltering) {
   if (isFiltering) {
     $("#theme").hide();
     $(".tagContainer").hide();
-    $("#summary").hide();
+    // $("#summary").hide();
   } else {
     $("#theme").show();
     $(".tagContainer").show();
-    $("#summary").show();
+    // $("#summary").show();
   }
   global.isFilteringMode = isFiltering;
   onChangeCriteria();
@@ -946,7 +946,7 @@ function init() {
   // global.float.floatThead({
   //   useAbsolutePositioning: false
   // });
-  $("#summary").collapse({});
+  // $("#summary").collapse({});
 }
 $(document).ready(function() {
   init()
