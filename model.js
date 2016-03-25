@@ -891,8 +891,7 @@ function deps(parent) {
   var c = clothesSet[category][id];
 
   if (patternSet[category] && patternSet[category][id]) {
-    parent.cost = num * cost[c.stars].pattern;
-    parent.unit = '金币';
+
     for (var i in patternSet[category][id]) {
       var source = patternSet[category][id][i];
       var reqNum = calcNum(num, source.number - 1); // real number
@@ -903,8 +902,6 @@ function deps(parent) {
   }
   var evol = parseSource(c.source.rawSource, '进');
   if (evol && clothesSet[c.type.mainType][evol]) {
-    parent.cost = num * cost[clothesSet[c.type.mainType][evol].stars].evolve;
-    parent.unit = '金币';
     var x = evolveSet[c.type.mainType][id].number;
     var reqNum = calcNum(num, x - 1); // real number
     var child = createOrUpdate(c.type.mainType, evol, true /* keep last */);
@@ -913,43 +910,13 @@ function deps(parent) {
   }
   var remake = parseSource(c.source.rawSource, '定');
   if (remake && clothesSet[c.type.mainType][remake]) {
-    parent.cost = num * convertSet[category][id].num * convertSet[category][id].price;
-    parent.unit = '星光币';
     var reqNum = calcNum(num, 1);
     var child = createOrUpdate(c.type.mainType, remake, false /* don't keep */);
     parent.addDeps(child, reqNum, num > 0);
     deps(child);
   }
-  if (c.price) {
-    parent.cost = c.price * num;
-    parent.unit = c.unit;
-  }
-  if (c.source.rawSource.indexOf('公') > 0) {
-    parent.cost = num * 6 * config.princessRate;
-    parent.unit = "体力";
-  }
-  var limited = 0;
-  for (var i in c.source.sources) {
-    if (c.source.sources[i].indexOf('公') > 0) {
-      limited ++;
-    }
-    if (c.source.sources[i].indexOf('少') > 0) {
-      parent.cost = num * 4 * config.maidenRate;
-      parent.unit = "体力";
-      limited = -1; // no limit
-      break;
-    }
-  }
-  if (limited > 0) {
-    parent.limit = Math.ceil(num * config.princessRate / limited / (3 + config.princessExtra));
-  }
-  if (!parent.cost || parent.cost == 0) {
-    if (c.source.rawSource.indexOf("迷") >= 0 || c.source.rawSource.indexOf("幻") >= 0) {
-      parent.luck = 1;
-    } else if (c.source.rawSource.indexOf("成就") >= 0) {
-      parent.effort = 1;
-    }
-  }
+ 
+ 
 }
 
 var root;
