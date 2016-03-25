@@ -1,5 +1,136 @@
 // Ivan's Workshop
 
+var cost = {
+  '1': {evolve: 1200, pattern: 800},
+  '2': {evolve: 2400, pattern: 1200},
+  '3': {evolve: 4000, pattern: 2000},
+  '4': {evolve: 7000, pattern: 4000},
+  '5': {evolve: 12000, pattern: 8000},
+  '6': {evolve: 20000, pattern: 20000},
+};
+
+var config;
+
+function Inventory() {
+  return {
+    mine: {},
+    serialize: function() {
+      var txt = "";
+      for (var type in this.mine) {
+        var x = [];
+        for (var c in this.mine[type]) {
+          x.push(c + "=" + this.mine[type][c]);
+        }
+        txt += type + ":" + x.join(',') + "|";
+      }
+      return txt;
+    },
+    deserialize: function(raw) {
+      var sections = raw.split('|');
+      this.mine = {};
+      for (var i in sections) {
+        if (sections[i].length < 1) {
+          continue;
+        }
+        var section = sections[i].split(':');
+        var type = section[0];
+        var clist = section[1].split(',');
+        this.mine[type] = [];
+        for (var j in clist) {
+          var items = clist[j].split('=');
+          this.mine[type][items[0]] = parseInt(items[1]);
+        }
+      }
+    },
+    update: function(category, id, value) {
+      if (!this.mine[category]) {
+        this.mine[category] = {};
+      }
+      this.mine[category][id] = value;
+    }
+  };
+}
+
+Resource = function(category, id, number) {
+  return {
+    category: category,
+    id: id,
+    inventory: 0,
+    number: number,
+    cost: 0,
+    unit: 'N/A',
+    keep: true,
+    deps: {},
+    ref: {},
+    require: {},
+    addDeps: function(node, num, require) {
+      this.deps[node.category + node.id] = node;
+      node.ref[this.category + this.id] = num;
+      node.require[this.category + this.id] = require;
+    },
+    getNumber: function() {
+      var n = 0;
+      var require = false;
+      for (var x in this.ref) {
+        n += this.ref[x];
+        require |= this.require[x];
+      }
+      return require ? n + (this.keep ? 1 : 0) : 0;
+    }
+  }
+}
+
+var patternSet = function() {
+  ret = {}
+  for (var i in pattern) {
+    var targetCate = pattern[i][0];
+    var targetId = pattern[i][1];
+    var sourceCate = pattern[i][2];
+    var sourceId = pattern[i][3];
+    var num = pattern[i][4];
+    if (!ret[targetCate]) {
+      ret[targetCate] = {};
+    }
+    if (!ret[targetCate][targetId]) {
+      ret[targetCate][targetId] = [];
+    }
+    ret[targetCate][targetId].push(Resource(sourceCate, sourceId, num));
+  }
+  return ret;
+}();
+
+var evolveSet = function() {
+  ret = {}
+  for (var i in evolve) {
+    var targetCate = evolve[i][0];
+    var targetId = evolve[i][1];
+    var sourceCate = evolve[i][2];
+    var sourceId = evolve[i][3];
+    var num = evolve[i][4];
+    if (!ret[targetCate]) {
+      ret[targetCate] = {};
+    }
+    ret[targetCate][targetId] = Resource(sourceCate, sourceId, num);
+  }
+  return ret;
+}();
+
+var convertSet = function() {
+  ret = {}
+  for (var i in convert) {
+    var targetCate = convert[i][0];
+    var targetId = convert[i][1];
+    var source = convert[i][2];
+    var price = convert[i][3];
+    var num = convert[i][4];
+    if (!ret[targetCate]) {
+      ret[targetCate] = {};
+    }
+    ret[targetCate][targetId] = {source: source, price: price, num: num};
+  }
+  return ret;
+}();
+
 var FEATURES = ["simple", "cute", "active", "pure", "cool"];
 var ACCRATIO = [1, 1, 1, 1, 0.95, 0.9, 0.825, 0.75, 0.7, 0.65, 0.6, 0.55, 0.51, 0.47, 0.45, 0.425, 0.4];
 
