@@ -164,7 +164,7 @@ function getStyle(rating) {
 
 function list(rows, isShoppingCart) {
   ret = "";
-  for (var i = row.length-1;i>0;i--) {
+  for (var i = rows.length-1;i>0;i--) {
     ret += row(rows[i], isShoppingCart);
   }
   if (isShoppingCart) {
