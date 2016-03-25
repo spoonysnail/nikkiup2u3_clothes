@@ -205,9 +205,7 @@ function drawTable(data, div, isShoppingCart) {
       redrawThead();
     });
   }
-  if (global.floating) {
-    $('#clothes table').floatThead('reflow');
-  }
+
 }
 
 function redrawThead() {
