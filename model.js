@@ -211,14 +211,14 @@ Clothes = function(csv, real) {
       for (var sourceType in this.deps) {
         for (var i in this.deps[sourceType]) {
           var c = this.deps[sourceType][i];
-          var pnode = Resource(c.type.mainType,c.id);
-          pnode.ref['request'] = 1;
-          pnode.require['request'] = true;
-          pnode.keep = 0;
-          deps(pnode);
-          var number = Math.max(pnode.deps[category_main+this.id].getNumber() - pnode.deps[category_main+this.id].inventory, 0);
-
-
+          // var pnode = Resource(c.type.mainType,c.id);
+          // pnode.ref['request'] = 1;
+          // pnode.require['request'] = true;
+          // pnode.keep = 0;
+          // deps(pnode);
+          // var number = Math.max(pnode.deps[category_main+this.id].getNumber() - pnode.deps[category_main+this.id].inventory, 0);
+          relationSet = {};
+          var number = relationSet[category_main+this.id][c.type.mainType+c.id];
 
           ret += indent + '[' + sourceType + '][' + c.type.mainType + ']'
               + c.name + (c.own ? '' : '(缺)')+ number +'&#xA;';
@@ -810,7 +810,7 @@ function deps(parent) {
 
 var root;
 var resourceSet = {};
-
+var relationSet={};
 
 var inventory = Inventory();
 
@@ -878,3 +878,47 @@ function taskList(nodes) {
   // ret += "</tbody></table>";
   return ret;
 }
+
+function addRel(ret,root){
+    if(!!root){
+        for (var i in root.deps) {
+            var node = root.deps[i];
+            var name = clothesSet[node.category][node.id];
+            var number = Math.max(node.getNumber() - node.inventory, 0);
+            if (!ret[node.category+node.id]) {
+                ret[node.category+node.id] = {};
+            }
+            if (!ret[node.category+node.id][root.category+root.id]) {
+                ret[node.category+node.id][node.category+root.id] = [];
+            }
+            ret[node.category+node.id][node.category+root.id]+=number;
+            addRel(node);
+        }
+    }
+};
+
+var relationSet = function() {
+    ret = {}
+    var cnt = 0;
+    for(var i in CATEGORIES){
+        var type =CATEGORIES[i];
+        var t =clothesSet[type];
+        for (var j in t){
+            var p = t[j];
+            var root = Resource(type, p.id);
+            root.ref['request'] = 1;
+            root.require['request'] = true;
+            root.keep = 0;
+            resourceSet = {};
+            deps(root);
+            //  summary(root);
+            var theme = 0;
+            var sameTheme = resourceSize() < 20;
+            
+            addRel(ret,root);
+            
+        }
+    }
+    
+    return ret;
+}();
