@@ -211,7 +211,7 @@ Clothes = function(csv, real) {
       for (var sourceType in this.deps) {
         for (var i in this.deps[sourceType]) {
           var c = this.deps[sourceType][i];
-          var pnode = Resource[c.type.mainType,c.id];
+          var pnode = Resource(c.type.mainType,c.id);
           pnode.ref['request'] = 1;
           pnode.require['request'] = true;
           pnode.keep = 0;
