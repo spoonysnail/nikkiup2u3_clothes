@@ -197,9 +197,9 @@ Clothes = function(csv, real) {
       for (var sourceType in this.deps) {
         for (var i in this.deps[sourceType]) {
           var c = this.deps[sourceType][i];
-          var number = 0;
-          if(node.deps[c.type.mainType+id])
-            number =node.deps[c.type.mainType+id].getNumber();
+          var number = Math.max(node.getNumber() - node.inventory, 0);
+
+
 
           ret += indent + '[' + sourceType + '][' + c.type.mainType + ']'
               + c.name + (c.own ? '' : '(缺)')+ number +'&#xA;';
