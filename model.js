@@ -77,6 +77,7 @@ Resource = function(category, id, number) {
     ref: {},
     require: {},
     depscnt:0,
+    parent:null,
     addDeps: function(node, num, require) {
       this.deps[node.category + node.id] = node;
       node.ref[this.category + this.id] = num;
@@ -204,16 +205,18 @@ Clothes = function(csv, real) {
       var ret = "";
       var category_main = this.type.mainType;
       var node = Resource(category_main,this.id);
-      node.ref['request'] = 1;
-      node.require['request'] = true;
-      node.keep = 0;
-      resourceSet = {};
-      deps(node);
+      
+     // resourceSet = {};
+      
       for (var sourceType in this.deps) {
         for (var i in this.deps[sourceType]) {
           var c = this.deps[sourceType][i];
-          var chnode = node.deps[c.type.mainType+c.id];
-          var number = Math.max(chnode.getNumber() - chnode.inventory, 0);
+          var pnode = node.deps[c.type.mainType+c.id];
+          pnode.ref['request'] = 1;
+          pnode.require['request'] = true;
+          pnode.keep = 0;
+          deps(pnode);
+          var number = Math.max(node.getNumber() - node.inventory, 0);
 
 
 
