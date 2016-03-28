@@ -63,10 +63,12 @@ Resource = function(category, id, number) {
     deps: {},
     ref: {},
     require: {},
+    depscnt:0,
     addDeps: function(node, num, require) {
       this.deps[node.category + node.id] = node;
       node.ref[this.category + this.id] = num;
       node.require[this.category + this.id] = require;
+      depscnt++;
     },
     getNumber: function() {
       var n = 0;
