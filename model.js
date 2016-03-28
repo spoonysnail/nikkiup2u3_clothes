@@ -217,7 +217,7 @@ Clothes = function(csv, real) {
           // pnode.keep = 0;
           // deps(pnode);
           // var number = Math.max(pnode.deps[category_main+this.id].getNumber() - pnode.deps[category_main+this.id].inventory, 0);
-          relationSet = {};
+          //relationSet = {};
           var number = relationSet[category_main+this.id][c.type.mainType+c.id];
 
           ret += indent + '[' + sourceType + '][' + c.type.mainType + ']'
@@ -810,7 +810,6 @@ function deps(parent) {
 
 var root;
 var resourceSet = {};
-var relationSet={};
 
 var inventory = Inventory();
 
