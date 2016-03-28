@@ -212,7 +212,8 @@ Clothes = function(csv, real) {
       for (var sourceType in this.deps) {
         for (var i in this.deps[sourceType]) {
           var c = this.deps[sourceType][i];
-          var number = Math.max(node.getNumber() - node.inventory, 0);
+       
+          var number = Math.max(c.getNumber() - c.inventory, 0);
 
 
 
