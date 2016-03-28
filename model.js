@@ -216,7 +216,7 @@ Clothes = function(csv, real) {
           pnode.require['request'] = true;
           pnode.keep = 0;
           deps(pnode);
-          var number = Math.max(node.getNumber() - node.inventory, 0);
+          var number = Math.max(pnode.deps[category_main+this.id].getNumber() - pnode.deps[category_main+this.id].inventory, 0);
 
 
 
