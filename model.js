@@ -9,6 +9,19 @@ var cost = {
   '6': {evolve: 20000, pattern: 20000},
 };
 
+var CATEGORIES = [
+  '发型',
+  '连衣裙',
+  '外套',
+  '上衣',
+  '下装',
+  '袜子',
+  '鞋子',
+  '饰品',
+  '妆容'
+];
+
+
 var config;
 
 function Inventory() {
