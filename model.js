@@ -992,13 +992,14 @@ function calRel(source){
         var target = relInfoSet[source][i].target;
         var targetCate = target.split('-')[0];
         var targetId = target.split('-')[1];
-        var t_flag = clothesSet[targetCate][targetId].own?0:1;
+        var t_flag = clothesSet[targetCate][targetId].own?1:0;
         if(type==2)
             customizeCnt++;
         //console.log('%d : %s',i,num);
         res += calRel(relInfoSet[source][i].target)*(num-1-t_flag);
+        console.log('%s : %d',target,calRel(relInfoSet[source][i].target)*(num-1-t_flag));
     }
     //res -= relInfoSet[source].length-1;
-    res += customizeCnt;
+    res += customizeCnt-!flag;
     return res;
 }
