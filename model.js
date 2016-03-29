@@ -985,10 +985,14 @@ function calRel(source){
     for(var i in relInfoSet[source]){
         var num = relInfoSet[source][i].num;
         var type =relInfoSet[source][i].type;
+        var target = relInfoSet[source][i].target;
+        var targetCate = target.substring(0,target.length-4);
+        var targetId = target.substring(target.length-3,target.length-1);
+        var flag = clothesSet[type][id].own?1:0;
         if(type==2)
             customizeCnt++;
-       // console.log('%d : %s',i,num);
-        res += calRel(relInfoSet[source][i].target)*(num-1);
+        //console.log('%d : %s',i,num);
+        res += calRel(relInfoSet[source][i].target)*(num-1)-flag;
     }
     //res -= relInfoSet[source].length-1;
     res += customizeCnt;
