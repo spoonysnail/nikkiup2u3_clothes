@@ -1002,5 +1002,6 @@ function calRel(source){
     }
   
     res += customizeCnt-!flag;
+    
     return res;
 }
