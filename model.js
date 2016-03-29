@@ -997,9 +997,9 @@ function calRel(source){
             customizeCnt++;
         //console.log('%d : %s',i,num);
         res += calRel(relInfoSet[source][i].target)*(num-1-t_flag);
-        console.log('%s : %d',target,calRel(relInfoSet[source][i].target)*(num-1-t_flag));
+        //console.log('%s : %d',target,calRel(relInfoSet[source][i].target)*(num-1-t_flag));
     }
     //res -= relInfoSet[source].length-1;
-    res += customizeCnt-!flag;
+    res += customizeCnt+1-!flag;
     return res;
 }
