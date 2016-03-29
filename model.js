@@ -980,7 +980,10 @@ var relInfoSet = function(){
 }();
 //计算总共所需source个数
 function calRel(source){
-    if(!relInfoSet[source]) return 1;
+    var sourceCate = source.split('-')[0];
+    var sourceId = source.split('-')[1];
+    var flag = clothesSet[sourceCate][sourceId].own?0:1;
+    if(!relInfoSet[source]) return flag;
     var res = 1;
     var customizeCnt = 0;
     for(var i in relInfoSet[source]){
@@ -989,14 +992,13 @@ function calRel(source){
         var target = relInfoSet[source][i].target;
         var targetCate = target.split('-')[0];
         var targetId = target.split('-')[1];
-        var flag = clothesSet[targetCate][targetId].own?1:0;
+        var t_flag = clothesSet[targetCate][targetId].own?0:1;
         if(type==2)
             customizeCnt++;
         //console.log('%d : %s',i,num);
-        res += calRel(relInfoSet[source][i].target)*(num-1)-flag;
+        res += calRel(relInfoSet[source][i].target)*(num-1-t_flag);
     }
     //res -= relInfoSet[source].length-1;
     res += customizeCnt;
     return res;
 }
-
