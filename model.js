@@ -996,10 +996,11 @@ function calRel(source){
         if(type==2)
             customizeCnt++;
         //console.log('%d : %s',i,num);
-        res += calRel(relInfoSet[source][i].target)*(num-1-t_flag);
-        //console.log('%s : %d',target,calRel(relInfoSet[source][i].target)*(num-1-t_flag));
+        //var c = (calRel(relInfoSet[source][i].target)-t_flag)*(num-1);
+       // console.log('%s : %s',target,c);
+        res += (calRel(relInfoSet[source][i].target)-t_flag)*(num-1);
     }
     //res -= relInfoSet[source].length-1;
-    res += customizeCnt+1-!flag;
+    res += customizeCnt;
     return res;
 }
