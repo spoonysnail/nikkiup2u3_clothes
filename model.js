@@ -988,7 +988,7 @@ function calRel(source){
         var target = relInfoSet[source][i].target;
         var targetCate = target.substring(0,target.length-3);
         var targetId = target.substring(target.length-3,target.length);
-        var flag = clothesSet[type][id].own?1:0;
+        var flag = clothesSet[targetCate][targetId].own?1:0;
         if(type==2)
             customizeCnt++;
         //console.log('%d : %s',i,num);
