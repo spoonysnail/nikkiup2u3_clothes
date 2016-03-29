@@ -993,11 +993,14 @@ function calRel(source){
         var targetCate = target.split('-')[0];
         var targetId = target.split('-')[1];
         var t_flag = clothesSet[targetCate][targetId].own;
-        if(type==2&&!t_flag)
-            customizeCnt++;
-        res += (calRel(relInfoSet[source][i].target))*(num-1);
+       
+        var customizeFlag = type==2 && !t_flag;
+        if(customizeFlag)
+            customizeCnt+=calRel(relInfoSet[source][i].target);
+ 
+       res += (calRel(relInfoSet[source][i].target))*(num-1);
     }
-
+  
     res += customizeCnt-!flag;
     return res;
 }
