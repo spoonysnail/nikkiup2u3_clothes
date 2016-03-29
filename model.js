@@ -989,18 +989,13 @@ function calRel(source){
     for(var i in relInfoSet[source]){
         var num = relInfoSet[source][i].num;
         var type =relInfoSet[source][i].type;
-        var target = relInfoSet[source][i].target;
-        var targetCate = target.split('-')[0];
-        var targetId = target.split('-')[1];
-        var t_flag = clothesSet[targetCate][targetId].own?1:0;
+  
         if(type==2)
             customizeCnt++;
-        //console.log('%d : %s',i,num);
-        //var c = (calRel(relInfoSet[source][i].target)-t_flag)*(num-1);
-       // console.log('%s : %s',target,c);
-        res += (calRel(relInfoSet[source][i].target)-t_flag)*(num-1);
+ 
+        res += (calRel(relInfoSet[source][i].target))*(num-1);
     }
-    //res -= relInfoSet[source].length-1;
-    res += customizeCnt;
+
+    res += customizeCnt-!flag;
     return res;
 }
