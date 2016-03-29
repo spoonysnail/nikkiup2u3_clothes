@@ -218,10 +218,10 @@ Clothes = function(csv, real) {
           // deps(pnode);
           // var number = Math.max(pnode.deps[category_main+this.id].getNumber() - pnode.deps[category_main+this.id].inventory, 0);
           //relationSet = {};
-          var number = relationSet[category_main+this.id][c.type.mainType+c.id];
+          //var number = relationSet[category_main+this.id][c.type.mainType+c.id];
 
           ret += indent + '[' + sourceType + '][' + c.type.mainType + ']'
-              + c.name + (c.own ? '' : '(缺)')+ number +'&#xA;';
+              + c.name + (c.own ? '' : '(缺)') +'&#xA;';
           ret += c.getDeps(indent + "    ");
         }
       }
