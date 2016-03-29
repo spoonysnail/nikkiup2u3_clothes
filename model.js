@@ -878,46 +878,119 @@ function taskList(nodes) {
   return ret;
 }
 
-function addRel(ret,root){
-    if(!!root){
-        for (var i in root.deps) {
-            var node = root.deps[i];
-            var name = clothesSet[node.category][node.id];
-            var number = Math.max(node.getNumber() - node.inventory, 0);
-            if (!ret[node.category+node.id]) {
-                ret[node.category+node.id] = {};
-            }
-            if (!ret[node.category+node.id][root.category+root.id]) {
-                ret[node.category+node.id][node.category+root.id] = [];
-            }
-            ret[node.category+node.id][node.category+root.id]+=number;
-            addRel(node);
-        }
+// function addRel(ret,root){
+//     if(!!root){
+//         for (var i in root.deps) {
+//             var node = root.deps[i];
+//             var name = clothesSet[node.category][node.id];
+//             var number = Math.max(node.getNumber() - node.inventory, 0);
+//             if (!ret[node.category+node.id]) {
+//                 ret[node.category+node.id] = {};
+//             }
+//             if (!ret[node.category+node.id][root.category+root.id]) {
+//                 ret[node.category+node.id][node.category+root.id] = [];
+//             }
+//             ret[node.category+node.id][node.category+root.id]+=number;
+//             addRel(node);
+//         }
+//     }
+// };
+
+// var relationSet = function() {
+//     ret = {}
+//     var cnt = 0;
+//     for(var i in CATEGORIES){
+//         var type =CATEGORIES[i];
+//         var t =clothesSet[type];
+//         for (var j in t){
+//             var p = t[j];
+//             var root = Resource(type, p.id);
+//             root.ref['request'] = 1;
+//             root.require['request'] = true;
+//             root.keep = 0;
+//             resourceSet = {};
+//             deps(root);
+//             //  summary(root);
+//             var theme = 0;
+//             var sameTheme = resourceSize() < 20;
+            
+//             addRel(ret,root);
+            
+//         }
+//     }
+    
+//     return ret;
+// }();
+
+//0:进化，1：设计图；2：定制
+rel=function(source,target,num,type){
+    return {
+        source:source,
+        target:target,
+        num:num,
+        type:type
     }
 };
-
-var relationSet = function() {
+//设定进关系表
+var relInfoSet = function(){
     ret = {}
-    var cnt = 0;
-    for(var i in CATEGORIES){
-        var type =CATEGORIES[i];
-        var t =clothesSet[type];
-        for (var j in t){
-            var p = t[j];
-            var root = Resource(type, p.id);
-            root.ref['request'] = 1;
-            root.require['request'] = true;
-            root.keep = 0;
-            resourceSet = {};
-            deps(root);
-            //  summary(root);
-            var theme = 0;
-            var sameTheme = resourceSize() < 20;
-            
-            addRel(ret,root);
-            
+    for (var i in evolve) {
+        var targetCate = evolve[i][0];
+        var targetId = evolve[i][1];
+        var sourceCate = evolve[i][2];
+        var sourceId = evolve[i][3];
+        var num = evolve[i][4];
+        if (!ret[sourceCate+sourceId]) {
+            ret[sourceCate+sourceId] = [];
         }
+        ret[sourceCate+sourceId].push(
+        rel(sourceCate+sourceId,targetCate+targetId,num,0));
     }
     
+    for (var i in pattern) {
+        var targetCate = pattern[i][0];
+        var targetId = pattern[i][1];
+        var sourceCate = pattern[i][2];
+        var sourceId = pattern[i][3];
+        var num = pattern[i][4];
+        if (!ret[sourceCate+sourceId]) {
+            ret[sourceCate+sourceId] = [];
+        }
+        ret[sourceCate+sourceId].push(
+        rel(sourceCate+sourceId,targetCate+targetId,num,1));
+    }
+    
+    for(var i in wardrobe){
+        var ind = wardrobe[i][15].indexOf('定');
+        if(ind<0)
+            continue;
+        var sourceCate=targetCate = wardrobe[i][1].split('-')[0];
+        var targetId = wardrobe[i][2];
+        var sourceId = wardrobe[i][15].substring(ind+1,ind+4);
+        if (!ret[sourceCate+sourceId]) {
+            ret[sourceCate+sourceId] = [];
+        }
+        ret[sourceCate+sourceId].push(
+        rel(sourceCate+sourceId,targetCate+targetId,1,2));
+        
+    }
+
     return ret;
 }();
+//计算总共所需source个数
+function calRel(source){
+    if(!relInfoSet[source]) return 1;
+    var res = 1;
+    var customizeCnt = 0;
+    for(var i in relInfoSet[source]){
+        var num = relInfoSet[source][i].num;
+        var type =relInfoSet[source][i].type;
+        if(type==2)
+            customizeCnt++;
+        console.log('%d : %s',i,num);
+        res += calRel(relInfoSet[source][i].target)*(num-1);
+    }
+    //res -= relInfoSet[source].length-1;
+    res += customizeCnt;
+    return res;
+}
