@@ -989,10 +989,12 @@ function calRel(source){
     for(var i in relInfoSet[source]){
         var num = relInfoSet[source][i].num;
         var type =relInfoSet[source][i].type;
-  
-        if(type==2)
+        var target = relInfoSet[source][i].target;
+        var targetCate = target.split('-')[0];
+        var targetId = target.split('-')[1];
+        var t_flag = clothesSet[targetCate][targetId].own;
+        if(type==2&&!t_flag)
             customizeCnt++;
- 
         res += (calRel(relInfoSet[source][i].target))*(num-1);
     }
 
