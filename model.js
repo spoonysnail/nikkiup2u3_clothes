@@ -987,7 +987,7 @@ function calRel(source){
         var type =relInfoSet[source][i].type;
         if(type==2)
             customizeCnt++;
-        console.log('%d : %s',i,num);
+       // console.log('%d : %s',i,num);
         res += calRel(relInfoSet[source][i].target)*(num-1);
     }
     //res -= relInfoSet[source].length-1;
