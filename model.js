@@ -932,6 +932,7 @@ rel=function(source,target,num,type){
     }
 };
 //设定进关系表
+
 var relInfoSet = function(){
     ret = {}
     for (var i in evolve) {
@@ -940,11 +941,11 @@ var relInfoSet = function(){
         var sourceCate = evolve[i][2];
         var sourceId = evolve[i][3];
         var num = evolve[i][4];
-        if (!ret[sourceCate+sourceId]) {
-            ret[sourceCate+sourceId] = [];
+        if (!ret[sourceCate+'-'+sourceId]) {
+            ret[sourceCate+'-'+sourceId] = [];
         }
-        ret[sourceCate+sourceId].push(
-        rel(sourceCate+sourceId,targetCate+targetId,num,0));
+        ret[sourceCate+'-'+sourceId].push(
+        rel(sourceCate+'-'+sourceId,targetCate+'-'+targetId,num,0));
     }
     
     for (var i in pattern) {
@@ -953,11 +954,11 @@ var relInfoSet = function(){
         var sourceCate = pattern[i][2];
         var sourceId = pattern[i][3];
         var num = pattern[i][4];
-        if (!ret[sourceCate+sourceId]) {
-            ret[sourceCate+sourceId] = [];
+        if (!ret[sourceCate+'-'+sourceId]) {
+            ret[sourceCate+'-'+sourceId] = [];
         }
-        ret[sourceCate+sourceId].push(
-        rel(sourceCate+sourceId,targetCate+targetId,num,1));
+        ret[sourceCate+'-'+sourceId].push(
+        rel(sourceCate+'-'+sourceId,targetCate+'-'+targetId,num,1));
     }
     
     for(var i in wardrobe){
@@ -966,12 +967,12 @@ var relInfoSet = function(){
             continue;
         var sourceCate=targetCate = wardrobe[i][1].split('-')[0];
         var targetId = wardrobe[i][2];
-        var sourceId = wardrobe[i][15].substring(ind+1,ind+4);
-        if (!ret[sourceCate+sourceId]) {
-            ret[sourceCate+sourceId] = [];
+        var sourceId = wardrobe[i][15].replace(/[^0-9]/ig,"");;
+        if (!ret[sourceCate+'-'+sourceId]) {
+            ret[sourceCate+'-'+sourceId] = [];
         }
-        ret[sourceCate+sourceId].push(
-        rel(sourceCate+sourceId,targetCate+targetId,1,2));
+        ret[sourceCate+'-'+sourceId].push(
+        rel(sourceCate+'-'+sourceId,targetCate+'-'+targetId,1,2));
         
     }
 
@@ -986,9 +987,9 @@ function calRel(source){
         var num = relInfoSet[source][i].num;
         var type =relInfoSet[source][i].type;
         var target = relInfoSet[source][i].target;
-        var targetCate = target.substring(0,target.length-3);
-        var targetId = target.substring(target.length-3,target.length);
-        var flag = clothesSet[targetCate][targetId].own?1:0;
+        var targetCate = target.split('-')[0];
+        var targetId = target.split('-')[1];
+        var flag = clothesSet[type][id].own?1:0;
         if(type==2)
             customizeCnt++;
         //console.log('%d : %s',i,num);
@@ -998,3 +999,4 @@ function calRel(source){
     res += customizeCnt;
     return res;
 }
+
