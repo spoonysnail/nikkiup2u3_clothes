@@ -15,7 +15,6 @@ var CATEGORY_HIERARCHY = function() {
 var global = {
   float: null,
   floating: true,
-  additionalBonus: null, // TODO: replace by UTS
   isFilteringMode: true,
   boostType: 1,
 };
@@ -164,8 +163,9 @@ function redrawThead() {
 function byFirst(a, b) {
   return b[0] - a[0];
 }
-
+var criteria={};
 var uiFilter = {};
+
 function onChangeUiFilter() {
   uiFilter = {};
   $('input[name=inventory]:checked').each(function() {
@@ -188,6 +188,31 @@ function refreshTable(criteria) {
   drawTable(filtering(criteria, uiFilter), "clothes", false, null);
 }
 
+function filtering(criteria, filters) {
+  var result = [];
+  for (var i in clothes) {
+    if (matches(clothes[i], criteria, filters)) {
+      result.push(clothes[i]);
+    }
+  }
+  if (global.isFilteringMode) {
+    result.sort(byId);
+  } 
+  return result;
+}
+
+function matches(c, criteria, filters) {
+  // only filter by feature when filtering
+  // if (global.isFilteringMode) {
+  //   for (var i in FEATURES) {
+  //     var f = FEATURES[i];
+  //     if (criteria[f] && criteria[f] * c[f][2] < 0) {
+  //       return false;
+  //     }
+  //   }
+  // }
+  return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type.type];
+}
 
 function byId(a, b) {
   return a.id < b.id ? -1 : (a.id > b.id ? 1 : 0);
