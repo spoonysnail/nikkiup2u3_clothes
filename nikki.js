@@ -277,12 +277,12 @@ function drawImport() {
   def.text = '请选择类别';
   def.value = '';
   dropdown.add(def);
-  for (var cate in scoring) {
-    var option = document.createElement('option');
-    option.text = cate;
-    option.value = cate;
-    dropdown.add(option);
-  }
+  // for (var cate in scoring) {
+  //   var option = document.createElement('option');
+  //   option.text = cate;
+  //   option.value = cate;
+  //   dropdown.add(option);
+  // }
 }
 
 function clearImport() {
