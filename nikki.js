@@ -21,7 +21,7 @@ var global = {
 };
 
 // for table use
-function thead(isShoppingCart, score) {
+function thead( score) {
   var ret = "<tr>";
   if (score) {
     ret += "<th class='score'>分数</th>";
@@ -33,11 +33,8 @@ function thead(isShoppingCart, score) {
   <th>心级</th>\
   <th>特殊属性</th>\
   <th>来源</th>";
-  if (!isShoppingCart) {
-    ret += "<th><span class='paging'></span></th><th class='top'></th>";
-  } else {
-    ret += "<th>&nbsp;</th>";
-  }
+  ret += "<th><span class='paging'></span></th><th class='top'></th>";
+  
   return ret + "</tr>\n";
 }
 
@@ -59,32 +56,7 @@ function inventoryCheckbox(type, id, own) {
   return ret;
 }
 
-function shoppingCartButton(type, id) {
-  return "<button onClick='addShoppingCart(\"" + type + "\",\"" + id
-      + "\")'>加入购物车</button>";
-}
 
-function removeShoppingCartButton(detailedType) {
-  return "<button onClick='removeShoppingCart(\"" + detailedType + "\")'>删除</button>";
-}
-
-function addShoppingCart(type, id) {
-  shoppingCart.put(clothesSet[type][id]);
-  refreshShoppingCart(null, null);
-  refreshRanking();
-}
-
-function removeShoppingCart(type) {
-  shoppingCart.remove(type);
-  refreshShoppingCart(null, null);
-  refreshRanking();
-}
-
-function clearShoppingCart() {
-  shoppingCart.clear();
-  refreshShoppingCart(null, null);
-  refreshRanking();
-}
 
 function toggleInventory(type, id) {
   var checked = !clothesSet[type][id].own;
@@ -114,30 +86,18 @@ function clickableTd(piece) {
       + name + "&nbsp;"+calRel(type+'-'+id) + "</a></td>";
 }
 
-function row(piece, isShoppingCart) {
+function row(piece) {
   var ret = "";
   if (!global.isFilteringMode) {
     ret += td(/*piece.tmpScore*/piece.totalScore);
   }
-  // if (isShoppingCart) {
-  //   ret += td(piece.name, '');
-  // } else {
-    ret += clickableTd(piece);
-  //}
+ 
+  ret += clickableTd(piece);
   var csv = piece.toCsv();
   for (var i in csv) {
     if(i<3 || i>12)
     ret += td(render(csv[i]), getStyle(csv[i]));
   }
-  
-  // if (isShoppingCart) {
-  //   // use id to detect if it is a fake clothes
-  //   if (piece.id) {
-  //     ret += td(removeShoppingCartButton(piece.type.type), '');
-  //   }
-  // } else {
-  //   ret += td(shoppingCartButton(piece.type.mainType, piece.id), '');
-  // }
   return tr(ret);
 }
 
@@ -162,52 +122,37 @@ function getStyle(rating) {
   }
 }
 
-function list(rows, isShoppingCart) {
+function list(rows) {
   ret = "";
   for (var i = rows.length-1;i>0;i--) {
-    ret += row(rows[i], isShoppingCart);
+    ret += row(rows[i]);
   }
-  if (isShoppingCart) {
-    ret += row(shoppingCart.totalScore, isShoppingCart);
-  }
+
   return ret;
 }
 
-function drawTable(data, div, isShoppingCart) {
+function drawTable(data, div) {
   if ($('#' + div + ' table').length == 0) {
-    if (isShoppingCart) {
-      $('#' + div).html("<table id='cartTable'><thead></thead><tbody></tbody></table>");
-    } else {
-      $('#' + div).html("<table class='mainTable'><thead></thead><tbody></tbody></table>");
-    }
+    $('#' + div).html("<table class='mainTable'><thead></thead><tbody></tbody></table>");
   }
-  $('#' + div + ' table thead').html(thead(isShoppingCart, !global.isFilteringMode));
-  $('#' + div + ' table tbody').html(list(data, isShoppingCart));
-  if (isShoppingCart) {
-    if (global.boostType == 1) {
-      $("#cartTable").removeClass("warning");
+  $('#' + div + ' table thead').html(thead( !global.isFilteringMode));
+  $('#' + div + ' table tbody').html(list(data));
+
+  $('span.paging').html("<button class='destoryFloat'></button>");
+  redrawThead();
+  $('button.destoryFloat').click(function() {
+    if (global.floating) {
+      global.float.floatThead('destroy');
+      global.floating = false;
     } else {
-      $("#cartTable").addClass("warning");
+      global.floating = true;
+      global.float.floatThead({
+        useAbsolutePositioning: false
+      });
     }
-  } else {
-    $('span.paging').html("<button class='destoryFloat'></button>");
     redrawThead();
-    $('button.destoryFloat').click(function() {
-      if (global.floating) {
-        global.float.floatThead('destroy');
-        global.floating = false;
-      } else {
-        global.floating = true;
-        global.float.floatThead({
-          useAbsolutePositioning: false
-        });
-      }
-      redrawThead();
-    });
-  }
-  // if (global.floating) {
-  //   $('#clothes table').floatThead('reflow');
-  // }
+  });
+
 }
 
 function redrawThead() {
@@ -215,273 +160,9 @@ function redrawThead() {
   $('th.top').html(global.floating ? "<a href='#filtersTop'>回到顶部</a>" : "");
 }
 
-var criteria = {};
-function onChangeCriteria() {
-  criteria = {};
-  for (var i in FEATURES) {
-    var f = FEATURES[i];
-    var weight = parseFloat($('#' + f + "Weight").val());
-    if (!weight) {
-      weight = 1;
-    }
-    var checked = $('input[name=' + f + ']:radio:checked');
-    if (checked.length) {
-      criteria[f] = parseInt(checked.val()) * weight;
-    }
-  }
-  tagToBonus(criteria, 'tag1');
-  tagToBonus(criteria, 'tag2');
-  if (global.additionalBonus && global.additionalBonus.length > 0) {
-    criteria.bonus = global.additionalBonus;
-  }
-  if (!global.isFilteringMode) {
-    refreshBoost(criteria);
-    setBoost(criteria, global.boostType);
-  }
-  calculateScore(criteria);
-}
-
-function changeBoost(boostType) {
-  var criteria = {};
-  criteria = {};
-  for (var i in FEATURES) {
-    var f = FEATURES[i];
-    var weight = parseFloat($('#' + f + "Weight").val());
-    if (!weight) {
-      weight = 1;
-    }
-    var checked = $('input[name=' + f + ']:radio:checked');
-    if (checked.length) {
-      criteria[f] = parseInt(checked.val()) * weight;
-    }
-  }
-  tagToBonus(criteria, 'tag1');
-  tagToBonus(criteria, 'tag2');
-  if (global.additionalBonus && global.additionalBonus.length > 0) {
-    criteria.bonus = global.additionalBonus;
-  }
-  if (boostType == 1) {
-    $("#accessoriesPanel").show();
-    $("#accessoriesWarning").hide();
-  } else {
-    $("#accessoriesPanel").hide();
-    $("#accessoriesWarning").show();
-  }
-  shoppingCart.clear();
-  setBoost(criteria, boostType);
-  calculateScore(criteria);
-}
-
-function setBoost(criteria, boostType) {
-  global.boostType = boostType;
-  $(".boost").text("");
-  switch(global.boostType) {
-    case 2: // global
-      criteria.boost1 = global.extreme.boost1;
-      criteria.boost2 = global.extreme.boost2;
-      $("#" + criteria.boost1 + "Boost").text("<-暖暖的微笑");
-      $("#" + criteria.boost2 + "Boost").text("<-迷人飞吻+暖暖的微笑");
-      shoppingCart.clear();
-      if (global.extreme.shoppingCart) {
-        for (var i in global.extreme.shoppingCart.cart) {
-          shoppingCart.put(global.extreme.shoppingCart.cart[i][2]);
-        }
-      }
-      break;
-    case 3: // own
-      criteria.boost1 = global.extremeOwn.boost1;
-      criteria.boost2 = global.extremeOwn.boost2;
-      $("#" + criteria.boost1 + "Boost").text("<-暖暖的微笑");
-      $("#" + criteria.boost2 + "Boost").text("<-迷人飞吻+暖暖的微笑");
-      shoppingCart.clear();
-      if (global.extremeOwn.shoppingCart) {
-        for (var i in global.extremeOwn.shoppingCart.cart) {
-          shoppingCart.put(global.extremeOwn.shoppingCart.cart[i][2]);
-        }
-      }
-      break;
-    default:
-      criteria.boost1 = null;
-      criteria.boost2 = null;
-  }
-}
-
-function refreshBoost(criteria) {
-  var totalMax = 0;
-  var totalOwnMax = 0;
-  var totalConfig = {};
-  var totalOwnConfig = {};
-  criteria.boost1 = null;
-  criteria.boost2 = null;
-  calcClothes(criteria);
-  for (var i in FEATURES) {
-    for (var j in FEATURES) {
-      if (i == j) {
-        continue;
-      }
-      var b1 = FEATURES[i];
-      var b2 = FEATURES[j];
-      var total = MaxTable();
-      var totalOwn = MaxTable();
-      for (var cate in clothesRanking) {
-        var currentTop = 0;
-        var currentTopOwn = 0;
-        for (var k in clothesRanking[cate]) {
-          var c = clothesRanking[cate][k];
-          if (c.tmpScore * 1.778 < currentTopOwn) {
-            // short cut, no hope to become the new winner
-            break;
-          }
-          var score = c.boost(b1, b2);
-          currentTop = total.put(c, cate, score[0], score[1]);
-          if (c.own) {
-            currentTopOwn = totalOwn.put(c, cate, score[0], score[1]);
-          }
-        }
-      }
-
-      total.decide();
-      totalOwn.decide();
-
-      if (total.total() > totalMax) {
-        totalMax = total.total();
-        totalConfig.boost1 = b1;
-        totalConfig.boost2 = b2;
-        totalConfig.shoppingCart = total;
-      }
-      if (totalOwn.total() > totalOwnMax) {
-        totalOwnMax = totalOwn.total();
-        totalOwnConfig.boost1 = b1;
-        totalOwnConfig.boost2 = b2;
-        totalOwnConfig.shoppingCart = totalOwn;
-      }
-    }
-  }
-  global.extreme = totalConfig;
-  global.extremeOwn = totalOwnConfig;
-}
-
 
 function byFirst(a, b) {
   return b[0] - a[0];
-}
-
-function MaxTable() {
-  return {
-    cart: {},
-    put: function(c, category, baseScore, bonusScore) {
-      if (score == 0) {
-        return 0;
-      }
-      var total = baseScore + bonusScore;
-      if (!this.cart[category]) {
-        this.cart[category] = [total, bonusScore, c];
-      } else {
-        var otherTotal = this.cart[category][0];
-        if ((c.type.mainType == "饰品" && accScore(total, bonusScore, 20) > accScore(otherTotal, this.cart[category][1], 20))
-            || (c.type.mainType != "饰品" && total > otherTotal)) {
-          this.cart[category][0] = total;
-          this.cart[category][1] = bonusScore;
-          this.cart[category][2] = c;
-        }
-      }
-      return this.cart[category][0];
-    },
-    decide: function() {
-      if (this.cart['连衣裙'] && this.cart['上衣'] && this.cart['下装']) {
-        if (this.cart['连衣裙'][0] > this.cart['上衣'][0] + this.cart['下装'][0]) {
-          delete this.cart['上衣'];
-          delete this.cart['下装'];
-        } else {
-          delete this.cart['连衣裙'];
-        }
-      }
-    },
-    total: function() {
-      var sum = 0;
-      var sumAcc = 0;
-      var bonusAcc = 0;
-      var numAcc = 0;
-      for (var i in this.cart) {
-        var c = this.cart[i][2].type.mainType;
-        if (c == "饰品") {
-          sumAcc += this.cart[i][0];
-          bonusAcc += this.cart[i][1];
-          numAcc ++;
-        } else {
-          sum += this.cart[i][0];
-        }
-      }
-      return sum + accScore(sumAcc, bonusAcc, numAcc);
-    }
-  };
-}
-
-function decide(cart) {
-  if (cart.getScore('连衣裙') > cart.getScore('上衣') + cart.getScore('下装')) {
-    delete cart.cart['上衣'];
-    delete cart.cart['下装'];
-  } else {
-    delete cart.cart['连衣裙'];
-  }
-}
-
-function calculateScore(criteria) {
-  if (!global.isFilteringMode) {
-    calcClothes(criteria);
-    if ($('#accessoriesHelper')[0].checked && global.boostType == 1) {
-      chooseAccessories();
-    } else {
-      refreshShoppingCart(criteria.boost1, criteria.boost2);
-    }
-  }
-  refreshTable(criteria);
-  refreshRanking();
-}
-
-function calcClothes(criteria) {
-  for (var i in clothes) {
-    clothes[i].calc(criteria);
-  }
-  for (var i in clothesRanking) {
-    clothesRanking[i].sort(byScore);
-  }
-}
-
-function tagToBonus(criteria, id) {
-  var tag = $('#' + id).val();
-  var bonus = null;
-  if (tag.length > 0) {
-    var base = $('#' + id + 'base :selected').text();
-    var weight = parseFloat($('#' + id + 'weight').val());
-    if ($('input[name=' + id + 'method]:radio:checked').val() == 'replace') {
-      bonus = replaceScoreBonusFactory(base, weight, tag)(criteria);
-    } else {
-      bonus = addScoreBonusFactory(base, weight, tag)(criteria);
-    }
-    if (!criteria.bonus) {
-      criteria.bonus = [];
-    }
-    criteria.bonus.push(bonus);
-  }
-}
-
-function clearTag(id) {
-  $('#' + id).val('');
-  $('#' + id + 'base').val('SS');
-  $('#' + id + 'weight').val('1');
-  $('input[name=' + id + 'method]:radio').get(0).checked = true;
-}
-
-function bonusToTag(idx, info) {
-  $('#tag' + idx).val(info.tag);
-  if (info.replace) {
-    $('input[name=tag' + idx + 'method]:radio').get(1).checked = true;
-  } else {
-    $('input[name=tag' + idx + 'method]:radio').get(0).checked = true;
-  }
-  $('#tag' + idx + 'base').val(info.base);
-  $('#tag' + idx + 'weight').val(info.weight);
 }
 
 var uiFilter = {};
@@ -507,106 +188,9 @@ function refreshTable(criteria) {
   drawTable(filtering(criteria, uiFilter), "clothes", false, null);
 }
 
-function chooseAccessories() {
-  var accCate = CATEGORY_HIERARCHY['饰品'];
-  for (var i in accCate) {
-    shoppingCart.remove(accCate[i]);
-  }
-  shoppingCart.putAll(filterTopAccessories(true));
-  refreshShoppingCart(null, null);
-}
-
-function refreshShoppingCart(boost1, boost2) {
-  shoppingCart.calc(boost1, boost2);
-  drawTable(shoppingCart.toList(byCategoryAndScore), "shoppingCart", true);
-}
-
-function byCategoryAndScore(a, b) {
-  var cata = category.indexOf(a.type.type);
-  var catb = category.indexOf(b.type.type);
-  return (cata - catb == 0) ? b.totalScore - a.totalScore : cata - catb;
-}
-
-function byScore(a, b) {
-  return b.totalScore - a.totalScore;
-}
 
 function byId(a, b) {
   return a.id < b.id ? -1 : (a.id > b.id ? 1 : 0);
-}
-
-function byBonusScore(a, b) {
-  return accScore(b.totalScore, b.totalBonus, 20) - accScore(a.totalScore, a.totalBonus, 20);
-}
-
-function filterTopAccessories(own) {
-  var accCate = CATEGORY_HIERARCHY['饰品'];
-  var toSort = [];
-  for (var i in accCate) {
-    var cate = accCate[i]
-    for (var j in clothesRanking[cate]) {
-      if ((own && clothesRanking[cate][j].own) || !own) {
-        toSort.push(clothesRanking[cate][j]);
-        break;
-      }
-    }
-  }
-
-  toSort.sort(byBonusScore);
-  var total = 0;
-  var totalBonus = 0;
-  var maxTotal = 0;
-  var maxIdx = -1;
-  for (var i = 0; i < toSort.length; i++) {
-    total += toSort[i].tmpScore;
-    totalBonus += toSort[i].tmpBonus;
-    realScore = accScore(total, totalBonus, i+1);
-    if (maxTotal  < realScore) {
-      maxTotal = realScore;
-      maxIdx = i;
-    }
-  }
-  return toSort.slice(0, maxIdx+1);
-}
-
-function filtering(criteria, filters) {
-  var result = [];
-  for (var i in clothes) {
-    if (matches(clothes[i], criteria, filters)) {
-      result.push(clothes[i]);
-    }
-  }
-  if (global.isFilteringMode) {
-    result.sort(byId);
-  } else {
-    result.sort(byCategoryAndScore);
-  } 
-  return result;
-}
-
-function matches(c, criteria, filters) {
-  // only filter by feature when filtering
-  // if (global.isFilteringMode) {
-  //   for (var i in FEATURES) {
-  //     var f = FEATURES[i];
-  //     if (criteria[f] && criteria[f] * c[f][2] < 0) {
-  //       return false;
-  //     }
-  //   }
-  // }
-  // if (global.isFilteringMode && criteria.bonus) {
-  //   var matchedTag = false;
-  //   for (var i in criteria.bonus) {
-  //     if (tagMatcher(criteria.bonus[i].tagWhitelist, c)) {
-  //       matchedTag = true;
-  //       break;
-  //     }
-  //   }
-  //   if (!matchedTag) {
-  //     return false;
-  //   }
-  // }
-  return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type.type];
 }
 
 function loadCustomInventory() {
@@ -662,87 +246,6 @@ function switchCate(c) {
   $("#category-" + c).addClass("active");
   onChangeUiFilter();
 }
-
-function changeMode(isFiltering) {
-  for (var i in FEATURES) {
-    var f = FEATURES[i];
-    if (isFiltering) {
-      $('#' + f + 'WeightContainer').hide();
-      $('#' + f + 'Boost').hide();
-    } else {
-      $('#' + f + 'WeightContainer').show();
-      $('#' + f + 'Boost').show();
-    }
-  }
-  if (isFiltering) {
-    $("#theme").hide();
-    $(".tagContainer").hide();
-    // $("#summary").hide();
-  } else {
-    $("#theme").show();
-    $(".tagContainer").show();
-    // $("#summary").show();
-  }
-  global.isFilteringMode = isFiltering;
-  onChangeCriteria();
-}
-
-function changeFilter() {
-  $("#theme")[0].options[0].selected = true;
-  currentLevel = null;
-  onChangeCriteria();
-}
-
-function changeTheme() {
-  currentLevel = null;
-  global.additionalBonus = null;
-  var theme = $("#theme").val();
-  if (allThemes[theme]) {
-    setFilters(allThemes[theme]);
-  }
-  onChangeCriteria();
-}
-
-var currentLevel; // used for post filtering.
-function setFilters(level) {
-  currentLevel = level;
-  global.additionalBonus = currentLevel.additionalBonus;
-  var weights = level.weight;
-  for (var i in FEATURES) {
-    var f = FEATURES[i];
-    var weight = weights[f];
-    $('#' + f + 'Weight').val(Math.abs(weight));
-    var radios = $('input[name=' + f + ']:radio');
-    for (var j in radios) {
-      var element = radios[j];
-      if (parseInt(element.value) * weight > 0) {
-        element.checked = true;
-        break;
-      }
-    }
-  }
-  clearTag('tag1');
-  clearTag('tag2');
-  if (level.bonus) {
-    for (var i in level.bonus) {
-      bonusToTag(parseInt(i)+1, level.bonus[i]);
-    }
-  }
-}
-
-// function drawTheme() {
-//   var dropdown = $("#theme")[0];
-//   var def = document.createElement('option');
-//   def.text = '自定义关卡';
-//   def.value = 'custom' 
-//   dropdown.add(def);
-//   for (var theme in allThemes) {
-//     var option = document.createElement('option');
-//     option.text = theme;
-//     option.value = theme;
-//     dropdown.add(option);
-//   }
-// }
 
 function drawImport() {
   var dropdown = $("#importCate")[0];
@@ -822,65 +325,6 @@ function doImport() {
   }
 }
 
-function refreshRanking() {
-  $("#ranking").empty();
-  if (!global.isFilteringMode) {
-    $("#ranking").html("<table id='rankingTableMain' class='ranking'><tbody></tbody></table>");
-    $("#ranking").append("<hr style='border-top:dashed 1px #999'>");
-    $("#ranking").append("<table id='rankingTableAcc' class='ranking'><tbody></tbody></table>");
-    for (var i in category) {
-      var cate = category[i];
-      var cateName = cate;
-      if (cate.indexOf('-') >= 0) {
-        cateName = cate.split('-')[1];
-      }
-      var tr = $("<tr>");
-      tr.append("<td class='category'>【" + cateName + "】</td>");
-      var ranking = $("<td>");
-      for (var i = 0; i < 5; i++) {
-        var x = renderRanking(cate, i);
-        if (x) {
-          ranking.append(x);
-        } else {
-          break;
-        }
-      }
-      if (clothesRanking[cate].length > 5) {
-        ranking.append(moreLink(cate));
-      }
-      tr.append(ranking);
-      if (cate.indexOf("饰品")>=0) {
-        $("#rankingTableAcc tbody").append(tr);
-      } else {
-        $("#rankingTableMain tbody").append(tr);
-      }
-    }
-  }
-}
-
-function renderRanking(cate, ranking) {
-  if (clothesRanking[cate].length > ranking) {
-    var c = clothesRanking[cate][ranking];
-    var cls = "";
-    if (shoppingCart.contains(c)) {
-      cls = "class='blue'";
-    } else if (ranking == 0 || c.totalScore == clothesRanking[cate][0].totalScore)  {
-      cls = "class='red'";
-    }
-    var ret = "<span " + cls + ">" + c.name + "(" + c.source.compact() + c.totalScore + ")" + "</span>";
-    if (ranking > 0) {
-      if (clothesRanking[cate][ranking].totalScore < clothesRanking[cate][ranking-1].totalScore) {
-        ret = "<span>&gt;<span>" + ret;
-      } else {
-        ret = "<span>=<span>" + ret;
-      }
-    }
-    return $(ret);
-  } else {
-    return null;
-  }
-}
-
 function moreLink(cate) {
   var link = $("<span class='more'>&nbsp;| More...</a>");
   link.attr("num", 5);
@@ -903,56 +347,17 @@ function moreLink(cate) {
   return link;
 }
 
-function setupSearch() {
-  // $('#searchitem').autoComplete({
-  //   minChars: 1,
-  //   cache: false,
-  //   source: function(term, suggest){
-  //     var matches = [];
-  //     for (var i in clothes) {
-  //       if (clothes[i].name.indexOf(term) >= 0 || clothes[i].id.indexOf(term) >= 0) {
-  //         matches.push(clothes[i]);
-  //       }
-  //       if (matches.length > 10) {
-  //         break;
-  //       }
-  //     }
-  //     suggest(matches);
-  //   },
-  //   renderItem: function (item, search) {
-  //     return "<div class='autocomplete-suggestion' data-type='" + item.type.mainType + "' data-id='" + item.id + "'>"
-  //         + item.type.type + " " + item.id + " " + item.name + "</div>";
-  //   },
-  //   onSelect: function(e, term, item){
-  //     addShoppingCart(item.data('type'), item.data('id'));
-  //   }
-  // });
-}
 
 function init() {
   var mine = loadFromStorage();
   calcDependencies();
-  drawFilter();
-  //drawTheme();
   drawImport();
-  //changeMode(false);
   switchCate(category[0]);
   updateSize(mine);
-  setupSearch();
- // refreshShoppingCart(null, null);
   processSources();
-
-  // global.float = $('table.mainTable');
-  // global.float.floatThead({
-  //   useAbsolutePositioning: false
-  // });
-  // $("#summary").collapse({});
 }
 $(document).ready(function() {
   init()
 });
-
-
-// calc.js
 
 
