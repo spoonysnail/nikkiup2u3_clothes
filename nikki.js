@@ -93,7 +93,6 @@ function row(piece) {
   ret += clickableTd(piece);
   var csv = piece.toCsv();
   for (var i in csv) {
-    if(i<3 || i>12)
     ret += td(render(csv[i]), getStyle(csv[i]));
   }
   return tr(ret);
