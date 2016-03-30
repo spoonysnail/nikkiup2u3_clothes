@@ -65,6 +65,13 @@ function toggleInventory(type, id) {
   saveAndUpdate();
 }
 
+
+function updateRel(type,id){
+  var inputNum = document.getElementById('have-'+type+id).value;
+  alert(type+id);
+}
+
+
 function clickableTd(piece) {
   var name = piece.name;
   var type = piece.type.mainType;
@@ -98,18 +105,14 @@ function row(piece) {
     ret += td(render(csv[i]), getStyle(csv[i]));
   }
   //ret+= "<input type='textbox' size=4 value='" + clothesSet[csv[0]][csv[1]].own?1:0 + "'/>";
-  var keep = clothesSet[csv[0]][csv[1]].own?1:0;
-   ret+= "<td id='keep-" + (csv[0] + csv[1]) + "' class='keepInput'><input type='textbox' size=6 onkeydown=updateRel(\""
-   +csv[0]+ "\",\"" + csv[1] + "\") value=' " + keep + "'\></td>";
+  var haveNum = clothesSet[csv[0]][csv[1]].have;
+   ret+= "<td class='keepInput'><input id='keep-" + (csv[0] + csv[1]) + "' type='textbox' size=6 onkeydown=updateRel(\""
+   +csv[0]+ "\",\"" + csv[1] + "\") value=' " + haveNum + "'\></td>";
     
   var require= calRel(csv[0]+'-'+csv[1]);
   ret += td(require,'requireNum');
   return tr(ret);
  
-}
-
-function updateRel(cate,id){
-  alert(cate+id);
 }
 
 function render(rating) {
