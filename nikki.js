@@ -379,6 +379,11 @@ function init() {
   switchCate(category[0]);
   updateSize(mine);
   processSources();
+  
+  global.float = $('table.mainTable');
+  global.float.floatThead({
+    useAbsolutePositioning: false
+  });
 }
 $(document).ready(function() {
   init()
