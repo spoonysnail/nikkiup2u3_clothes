@@ -71,7 +71,7 @@ function updateRel(type,id){
   clothesSet[type][id].have = parseInt(inputNum);
   saveAndUpdate();
 
-  alert(type+id+'-'+inputNum);
+ // alert(type+id+'-'+inputNum);
 }
 
 
