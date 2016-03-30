@@ -98,6 +98,7 @@ function MyClothes() {
     return {
     mine: {},
     mineCnt:{},
+    mineStr:{},
     size: 0,
     filter: function(clothes) {
         this.mine = {}
@@ -106,26 +107,34 @@ function MyClothes() {
         for (var i in clothes) {
             if (clothes[i].own) {
                 var type = clothes[i].type.mainType;
-                if (!this.mine[type]) {
+                if (!this.mine[type])
                     this.mine[type] = [];
+                
+                if (!this.mineCnt[type])
                     this.mineCnt[type] = [];
-                }
+                
+                if (!this.mineStr[type])
+                    this.mineStr[type] = [];
+                
                 this.mine[type].push(clothes[i].id);
-                this.mineCnt[type].push(1);
+                this.mineCnt[type].push(clothes[i].have);
+                this.mineStr[type].push(clothes[i].id+'-'+clothes[i].have);
                 this.size ++;
             }
         }
     },
     serialize: function() {
         var txt = "";
-        for (var type in this.mine) {
-            txt += type + ":" + (this.mine[type]+'-'+this.mineCnt[type]).join(',') + "|";
+        for (var type in this.mineStr) {
+            txt += type + ":" + this.mineStr[type].join(',') + "|";
         }
         return txt;
     },
     deserialize: function(raw) {
         var sections = raw.split('|');
         this.mine = {};
+        this.mineCnt = {};
+        this.mineStr = {};
         this.size = 0;
         for (var i in sections) {
             if (sections[i].length < 1) {
@@ -136,18 +145,18 @@ function MyClothes() {
             if (type == "上装") {
                 type = "上衣";
             }
-            var idCntSet = section[1].split(',');
+            this.mineStr = section[1].split(',');
             if(!this.mine[type])
-              this.mine[type]={};
+                this.mine[type]={};
             if(!this.mineCnt[type])
-              this.mineCnt[type]={};
+                this.mineCnt[type]={};
             
-            for(var j in idCntSet){
-                var tmp = idCntSet[j].split('-')
+            for(var j in this.mineStr){
+                var tmp = this.mineStr[j].split('-')
                 this.mine[type][j]= tmp[0];
                 this.mineCnt[type][j] = tmp.length > 1 ? tmp[1]:1;
             }
-            this.size += idCntSet.length;
+            this.size += this.mineStr.length;
         }
     },
     update: function(clothes) {
