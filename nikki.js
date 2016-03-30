@@ -113,9 +113,9 @@ function row(piece) {
    ret+= "<td class='haveInput'><input id='have-" + (csv[0] + csv[1]) + "' type='textbox' size=6 onChange=updateRel(\""
    +csv[0]+ "\",\"" + csv[1] + "\") value=' " + haveNum + "'\></td>";
     
-  var require= calRel(csv[0]+'-'+csv[1]);
-  var res = require>0?require:0;
-  var consume = require<0?-require:0;
+  var res= calRel(csv[0]+'-'+csv[1]);
+  var require = res>0?res:0;
+  var consume = res<0?-res:0;
   ret += td(require,'requireNum');
   ret += td(consume,'consumeNum');
   return tr(ret);
