@@ -104,59 +104,56 @@ Resource = function(category, id, number) {
   }
 }
 
-var patternSet = function() {
-  ret = {}
-  for (var i in pattern) {
-    var targetCate = pattern[i][0];
-    var targetId = pattern[i][1];
-    var sourceCate = pattern[i][2];
-    var sourceId = pattern[i][3];
-    var num = pattern[i][4];
-    if (!ret[targetCate]) {
-      ret[targetCate] = {};
-    }
-    if (!ret[targetCate][targetId]) {
-      ret[targetCate][targetId] = [];
-    }
-    ret[targetCate][targetId].push(Resource(sourceCate, sourceId, num));
-  }
-  return ret;
-}();
+// var patternSet = function() {
+//   ret = {}
+//   for (var i in pattern) {
+//     var targetCate = pattern[i][0];
+//     var targetId = pattern[i][1];
+//     var sourceCate = pattern[i][2];
+//     var sourceId = pattern[i][3];
+//     var num = pattern[i][4];
+//     if (!ret[targetCate]) {
+//       ret[targetCate] = {};
+//     }
+//     if (!ret[targetCate][targetId]) {
+//       ret[targetCate][targetId] = [];
+//     }
+//     ret[targetCate][targetId].push(Resource(sourceCate, sourceId, num));
+//   }
+//   return ret;
+// }();
 
-var evolveSet = function() {
-  ret = {}
-  for (var i in evolve) {
-    var targetCate = evolve[i][0];
-    var targetId = evolve[i][1];
-    var sourceCate = evolve[i][2];
-    var sourceId = evolve[i][3];
-    var num = evolve[i][4];
-    if (!ret[targetCate]) {
-      ret[targetCate] = {};
-    }
-    ret[targetCate][targetId] = Resource(sourceCate, sourceId, num);
-  }
-  return ret;
-}();
+// var evolveSet = function() {
+//   ret = {}
+//   for (var i in evolve) {
+//     var targetCate = evolve[i][0];
+//     var targetId = evolve[i][1];
+//     var sourceCate = evolve[i][2];
+//     var sourceId = evolve[i][3];
+//     var num = evolve[i][4];
+//     if (!ret[targetCate]) {
+//       ret[targetCate] = {};
+//     }
+//     ret[targetCate][targetId] = Resource(sourceCate, sourceId, num);
+//   }
+//   return ret;
+// }();
 
-var convertSet = function() {
-  ret = {}
-  for (var i in convert) {
-    var targetCate = convert[i][0];
-    var targetId = convert[i][1];
-    var source = convert[i][2];
-    var price = convert[i][3];
-    var num = convert[i][4];
-    if (!ret[targetCate]) {
-      ret[targetCate] = {};
-    }
-    ret[targetCate][targetId] = {source: source, price: price, num: num};
-  }
-  return ret;
-}();
-
-// var ACCRATIO = [1, 1, 1, 1, 0.95, 0.9, 0.825, 0.75, 0.7, 0.65, 0.6, 0.55, 0.51, 0.47, 0.45, 0.425, 0.4];
-// var FEATURES = ["simple", "cute", "active", "pure", "cool"];
+// var convertSet = function() {
+//   ret = {}
+//   for (var i in convert) {
+//     var targetCate = convert[i][0];
+//     var targetId = convert[i][1];
+//     var source = convert[i][2];
+//     var price = convert[i][3];
+//     var num = convert[i][4];
+//     if (!ret[targetCate]) {
+//       ret[targetCate] = {};
+//     }
+//     ret[targetCate][targetId] = {source: source, price: price, num: num};
+//   }
+//   return ret;
+// }();
 
 
 // parses a csv row into object
@@ -173,33 +170,18 @@ Clothes = function(csv, real) {
     type: theType,
     id: csv[2],
     stars: csv[3],
-    // simple: realRating(csv[5], csv[4], real ? real[5] : null, real ? real[4] : null, theType),
-    // cute: realRating(csv[9], csv[8], real ? real[9] : null, real ? real[8] : null, theType),
-    // active: realRating(csv[7], csv[6], real ? real[7] : null, real ? real[6] : null, theType),
-    // pure: realRating(csv[11], csv[10], real ? real[11] : null, real ? real[10] : null, theType),
-    // cool: realRating(csv[12], csv[13], real ? real[12] : null, real ? real[13] : null, theType),
     tags: csv[14].split(','),
     source: Source(csv[15]),
     suit: csv[16],
-    // tmpScoreByCategory: ScoreByCategory(),
-    // bonusByCategory: ScoreByCategory(),
     deps: {},
     toCsv: function() {
       name = this.name;
       type = this.type;
       id = this.id;
       stars = this.stars;
-      // simple = this.simple;
-      // cute = this.cute;
-      // active = this.active;
-      // pure = this.pure;
-      // cool = this.cool;
       extra = this.tags.join(',');
       source = this.source.rawSource;
       return [type.type, id, stars,
-      // simple[0], simple[1], cute[0], cute[1],
-      //     active[0], active[1], pure[0], pure[1], cool[0],
-      //     cool[1], 
           extra, source];
     },
     addDep: function(sourceType, c) {
@@ -780,78 +762,78 @@ function createOrUpdate(category, id, keep) {
   return resourceSet[category][id];
 }
 
-function deps(parent) {
-  var category = parent.category;
-  var id = parent.id;
-  var num = Math.max(parent.getNumber() - parent.inventory, 0);
-  var c = clothesSet[category][id];
+// function deps(parent) {
+//   var category = parent.category;
+//   var id = parent.id;
+//   var num = Math.max(parent.getNumber() - parent.inventory, 0);
+//   var c = clothesSet[category][id];
 
-  if (patternSet[category] && patternSet[category][id]) {
+//   if (patternSet[category] && patternSet[category][id]) {
 
-    for (var i in patternSet[category][id]) {
-      var source = patternSet[category][id][i];
-      var reqNum = calcNum(num, source.number - 1); // real number
-      var child = createOrUpdate(source.category, source.id, true /* keep last */);
-      parent.addDeps(child, reqNum, num > 0);
-      deps(child);
-    }
-  }
-  var evol = parseSource(c.source.rawSource, '进');
-  if (evol && clothesSet[c.type.mainType][evol]) {
-    var x = evolveSet[c.type.mainType][id].number;
-    var reqNum = calcNum(num, x - 1); // real number
-    var child = createOrUpdate(c.type.mainType, evol, true /* keep last */);
-    parent.addDeps(child, reqNum, num > 0);
-    deps(child);
-  }
-  var remake = parseSource(c.source.rawSource, '定');
-  if (remake && clothesSet[c.type.mainType][remake]) {
-    var reqNum = calcNum(num, 1);
-    var child = createOrUpdate(c.type.mainType, remake, false /* don't keep */);
-    parent.addDeps(child, reqNum, num > 0);
-    deps(child);
-  }
+//     for (var i in patternSet[category][id]) {
+//       var source = patternSet[category][id][i];
+//       var reqNum = calcNum(num, source.number - 1); // real number
+//       var child = createOrUpdate(source.category, source.id, true /* keep last */);
+//       parent.addDeps(child, reqNum, num > 0);
+//       deps(child);
+//     }
+//   }
+//   var evol = parseSource(c.source.rawSource, '进');
+//   if (evol && clothesSet[c.type.mainType][evol]) {
+//     var x = evolveSet[c.type.mainType][id].number;
+//     var reqNum = calcNum(num, x - 1); // real number
+//     var child = createOrUpdate(c.type.mainType, evol, true /* keep last */);
+//     parent.addDeps(child, reqNum, num > 0);
+//     deps(child);
+//   }
+//   var remake = parseSource(c.source.rawSource, '定');
+//   if (remake && clothesSet[c.type.mainType][remake]) {
+//     var reqNum = calcNum(num, 1);
+//     var child = createOrUpdate(c.type.mainType, remake, false /* don't keep */);
+//     parent.addDeps(child, reqNum, num > 0);
+//     deps(child);
+//   }
  
  
-}
+// }
 
 var root;
-var resourceSet = {};
+//var resourceSet = {};
 
 var inventory = Inventory();
 
-function processSources() {
-  for (var i in clothes) {
-    var c = clothes[i];
-    var sources = c.source.sources;
-    var tbd = [];
-    for (var j in sources) {
-      var evol = parseSource(sources[j], '进');
-      var remake = parseSource(sources[j], '定');
+// function processSources() {
+//   for (var i in clothes) {
+//     var c = clothes[i];
+//     var sources = c.source.sources;
+//     var tbd = [];
+//     for (var j in sources) {
+//       var evol = parseSource(sources[j], '进');
+//       var remake = parseSource(sources[j], '定');
 
-      if (evol && clothesSet[c.type.mainType][evol]) {
-        tbd.push(clothesSet[c.type.mainType][evol].name + evolveSet[c.type.mainType][c.id].number + "进1");
-      } else if (remake && clothesSet[c.type.mainType][remake]) {
-        tbd.push(clothesSet[c.type.mainType][remake].name + "+"
-            + convertSet[c.type.mainType][c.id].num
-            + convertSet[c.type.mainType][c.id].source);
-      } else {
-        tbd.push(sources[j]);
-      }
-    }
-    c.sources = tbd;
-  }
-}
+//       if (evol && clothesSet[c.type.mainType][evol]) {
+//         tbd.push(clothesSet[c.type.mainType][evol].name + evolveSet[c.type.mainType][c.id].number + "进1");
+//       } else if (remake && clothesSet[c.type.mainType][remake]) {
+//         tbd.push(clothesSet[c.type.mainType][remake].name + "+"
+//             + convertSet[c.type.mainType][c.id].num
+//             + convertSet[c.type.mainType][c.id].source);
+//       } else {
+//         tbd.push(sources[j]);
+//       }
+//     }
+//     c.sources = tbd;
+//   }
+// }
 
-function resourceSize() {
-  var size = 0;
-  for (var cate in resourceSet) {
-    for (var i in resourceSet[cate]) {
-      size ++;
-    }
-  }
-  return size;
-}
+// function resourceSize() {
+//   var size = 0;
+//   for (var cate in resourceSet) {
+//     for (var i in resourceSet[cate]) {
+//       size ++;
+//     }
+//   }
+//   return size;
+// }
 
 function visit(node, collector) {
   collector[node.category + node.id] = node;
