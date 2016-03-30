@@ -433,7 +433,7 @@ function calRel(source){
     }
     
     res -= haveNum;
-    return res>0?res:0;
+    return res;
 }
 
 
