@@ -32,7 +32,8 @@ function thead() {
   <th>特殊属性</th>\
   <th>来源</th>\
   <th>已拥有</th>\
-  <th>还需要</th>";
+  <th>还需要</th>\
+  <th>可分解</th>";
   ret += "<th><span class='paging'></span></th><th class='top'></th>";
   
   return ret + "</tr>\n";
@@ -113,7 +114,10 @@ function row(piece) {
    +csv[0]+ "\",\"" + csv[1] + "\") value=' " + haveNum + "'\></td>";
     
   var require= calRel(csv[0]+'-'+csv[1]);
+  var res = require>0?require:0;
+  var consume = require<0?-require:0;
   ret += td(require,'requireNum');
+  ret += td(consume,'consumeNum');
   return tr(ret);
  
 }
