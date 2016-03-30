@@ -429,7 +429,7 @@ function calRel(source){
             res+=calRel(relInfoSet[source][i].target);
         else
             res += (calRel(relInfoSet[source][i].target))*(num-1);
-        console.log('%d : %s  %d',i,num,haveNum);
+      //  console.log('%d : %s  %d',i,num,haveNum);
     }
     
     res -= haveNum;
