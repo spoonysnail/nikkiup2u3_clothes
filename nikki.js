@@ -68,7 +68,7 @@ function toggleInventory(type, id) {
 
 function updateRel(type,id){
   var inputNum = document.getElementById('have-'+type+id).value;
-   clothesSet[type][id].have = inputNum;
+  clothesSet[type][id].have = parseInt(inputNum);
   alert(type+id+'-'+inputNum);
 }
 
