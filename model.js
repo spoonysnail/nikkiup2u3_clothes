@@ -28,7 +28,6 @@ var typeInfo = function() {
     ret[name] = {
       type: name,
       mainType: name.split('-')[0],
-      score: getScore(name),
       deviation: getDeviation(name),
       needFilter: function() {
         return this.mainType == "连衣裙"
