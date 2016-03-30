@@ -417,6 +417,7 @@ function calRel(source){
     var sourceCate = source.split('-')[0];
     var sourceId = source.split('-')[1];
     var flag = clothesSet[sourceCate][sourceId].own?0:1;
+    var haveNum = clothesSet[sourceCate][sourceId].have;
     if(!relInfoSet[source]) return flag;
     var res = 1;
     for(var i in relInfoSet[source]){
@@ -428,9 +429,11 @@ function calRel(source){
             res+=calRel(relInfoSet[source][i].target);
         else
             res += (calRel(relInfoSet[source][i].target))*(num-1);
-        
+        console.log('%d : %s  %d',i,num,haveNum);
     }
     
-    res -= !flag;
+    res -= haveNum;
     return res;
 }
+
+
