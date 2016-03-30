@@ -145,7 +145,7 @@ function MyClothes() {
             if (type == "上装") {
                 type = "上衣";
             }
-            this.mineStr = section[1].split(',');
+            this.mineStr[type] = section[1].split(',');
             if(!this.mine[type])
                 this.mine[type]={};
             if(!this.mineCnt[type])
