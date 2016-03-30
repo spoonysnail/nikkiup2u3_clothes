@@ -97,7 +97,7 @@ function row(piece) {
   for (var i in csv) {
     ret += td(render(csv[i]), getStyle(csv[i]));
   }
-  ret+= "<input type='textbox' size=4 value='" + clothesSet[csv[0]][csv[1]].own?1:0 + "'/>";
+  //ret+= "<input type='textbox' size=4 value='" + clothesSet[csv[0]][csv[1]].own?1:0 + "'/>";
   var require= calRel(csv[0]+'-'+csv[1]);
   ret += "<td class=keepInput><input type='textbox' size=4 value='" + clothesSet[csv[0]][csv[1]].own?1:0 + "'/></td>";
   ret += td(require,'requireNum');
