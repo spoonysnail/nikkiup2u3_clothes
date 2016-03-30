@@ -30,7 +30,9 @@ function thead() {
   <th>编号</th>\
   <th>心级</th>\
   <th>特殊属性</th>\
-  <th>来源</th>";
+  <th>来源</th>\
+  <th>已拥有</th>\
+  <th>还需要</th>";
   ret += "<th><span class='paging'></span></th><th class='top'></th>";
   
   return ret + "</tr>\n";
