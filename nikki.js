@@ -311,12 +311,12 @@ function updateSize(mine) {
   $("#inventoryCount").text('(' + mine.size + ')');
   $("#myClothes").val(mine.serialize());
   var subcount = {};
-  for (c in mine.mine) {
+  for (c in mine.mineStr) {
     var type = c.split('-')[0];
     if (!subcount[type]) {
       subcount[type] = 0;
     }
-    subcount[type] += mine.mine[type].length;
+    subcount[type] += mine.mineStr[type].length;
   }
   for (c in subcount) {
     $("#" + c + ">a").text(c + "(" + subcount[c] + ")");
