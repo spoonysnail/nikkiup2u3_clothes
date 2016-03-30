@@ -137,6 +137,11 @@ function MyClothes() {
                 type = "上衣";
             }
             var idCntSet = section[1].split(',');
+            if(!this.mine[type])
+              this.mine[type]={};
+            if(!this.mineCnt[type])
+              this.mineCnt[type]={};
+            
             for(var j in idCntSet){
                 var tmp = idCntSet[j].split('-')
                 this.mine[type][j]= tmp[0];
