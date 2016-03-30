@@ -107,7 +107,7 @@ function row(piece) {
   }
   //ret+= "<input type='textbox' size=4 value='" + clothesSet[csv[0]][csv[1]].own?1:0 + "'/>";
   var haveNum = clothesSet[csv[0]][csv[1]].have;
-   ret+= "<td class='keepInput'><input id='keep-" + (csv[0] + csv[1]) + "' type='textbox' size=6 onkeydown=updateRel(\""
+   ret+= "<td class='haveInput'><input id='have-" + (csv[0] + csv[1]) + "' type='textbox' size=6 onChange=updateRel(\""
    +csv[0]+ "\",\"" + csv[1] + "\") value=' " + haveNum + "'\></td>";
     
   var require= calRel(csv[0]+'-'+csv[1]);
