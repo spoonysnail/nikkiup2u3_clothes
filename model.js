@@ -1,14 +1,5 @@
 // Ivan's Workshop
 
-var cost = {
-  '1': {evolve: 1200, pattern: 800},
-  '2': {evolve: 2400, pattern: 1200},
-  '3': {evolve: 4000, pattern: 2000},
-  '4': {evolve: 7000, pattern: 4000},
-  '5': {evolve: 12000, pattern: 8000},
-  '6': {evolve: 20000, pattern: 20000},
-};
-
 var CATEGORIES = [
   '发型',
   '连衣裙',
@@ -38,8 +29,6 @@ var typeInfo = function() {
   }
   return ret;
 }();
-
-
 
 var config;
 
@@ -166,8 +155,8 @@ var convertSet = function() {
   return ret;
 }();
 
-var FEATURES = ["simple", "cute", "active", "pure", "cool"];
-var ACCRATIO = [1, 1, 1, 1, 0.95, 0.9, 0.825, 0.75, 0.7, 0.65, 0.6, 0.55, 0.51, 0.47, 0.45, 0.425, 0.4];
+// var ACCRATIO = [1, 1, 1, 1, 0.95, 0.9, 0.825, 0.75, 0.7, 0.65, 0.6, 0.55, 0.51, 0.47, 0.45, 0.425, 0.4];
+// var FEATURES = ["simple", "cute", "active", "pure", "cool"];
 
 
 // parses a csv row into object
@@ -184,32 +173,34 @@ Clothes = function(csv, real) {
     type: theType,
     id: csv[2],
     stars: csv[3],
-    simple: realRating(csv[5], csv[4], real ? real[5] : null, real ? real[4] : null, theType),
-    cute: realRating(csv[9], csv[8], real ? real[9] : null, real ? real[8] : null, theType),
-    active: realRating(csv[7], csv[6], real ? real[7] : null, real ? real[6] : null, theType),
-    pure: realRating(csv[11], csv[10], real ? real[11] : null, real ? real[10] : null, theType),
-    cool: realRating(csv[12], csv[13], real ? real[12] : null, real ? real[13] : null, theType),
+    // simple: realRating(csv[5], csv[4], real ? real[5] : null, real ? real[4] : null, theType),
+    // cute: realRating(csv[9], csv[8], real ? real[9] : null, real ? real[8] : null, theType),
+    // active: realRating(csv[7], csv[6], real ? real[7] : null, real ? real[6] : null, theType),
+    // pure: realRating(csv[11], csv[10], real ? real[11] : null, real ? real[10] : null, theType),
+    // cool: realRating(csv[12], csv[13], real ? real[12] : null, real ? real[13] : null, theType),
     tags: csv[14].split(','),
     source: Source(csv[15]),
     suit: csv[16],
-    tmpScoreByCategory: ScoreByCategory(),
-    bonusByCategory: ScoreByCategory(),
+    // tmpScoreByCategory: ScoreByCategory(),
+    // bonusByCategory: ScoreByCategory(),
     deps: {},
     toCsv: function() {
       name = this.name;
       type = this.type;
       id = this.id;
       stars = this.stars;
-      simple = this.simple;
-      cute = this.cute;
-      active = this.active;
-      pure = this.pure;
-      cool = this.cool;
+      // simple = this.simple;
+      // cute = this.cute;
+      // active = this.active;
+      // pure = this.pure;
+      // cool = this.cool;
       extra = this.tags.join(',');
       source = this.source.rawSource;
-      return [type.type, id, stars, simple[0], simple[1], cute[0], cute[1],
-          active[0], active[1], pure[0], pure[1], cool[0],
-          cool[1], extra, source];
+      return [type.type, id, stars,
+      // simple[0], simple[1], cute[0], cute[1],
+      //     active[0], active[1], pure[0], pure[1], cool[0],
+      //     cool[1], 
+          extra, source];
     },
     addDep: function(sourceType, c) {
       if (!this.deps[sourceType]) {
@@ -249,139 +240,140 @@ Clothes = function(csv, real) {
     calc: function(filters) {
       var s = 0;
       var self = this;
-      this.tmpScoreByCategory.clear();
-      this.bonusByCategory.clear();
+      // this.tmpScoreByCategory.clear();
+      // this.bonusByCategory.clear();
       
-      for (var i in FEATURES) {
-        var f = FEATURES[i];
-        if (filters[f]) {
-          var sub = filters[f] * self[f][2];
-          if (filters[f] > 0) {
-            if (sub > 0) {
-              this.tmpScoreByCategory.record(f, sub, 0); // matched with major
-            } else {
-              this.tmpScoreByCategory.record(f, 0, sub); // mismatch with minor
-            }
-          } else {
-            if (sub > 0) {
-              this.tmpScoreByCategory.record(f, 0, sub); // matched with minor
-            } else {
-              this.tmpScoreByCategory.record(f, sub, 0); // mismatch with major
-            }
-          }
-          if (sub > 0) {
-            s += sub;
-          }
-        }
-      }
+      // for (var i in FEATURES) {
+      //   var f = FEATURES[i];
+      //   if (filters[f]) {
+      //     var sub = filters[f] * self[f][2];
+      //     if (filters[f] > 0) {
+      //       if (sub > 0) {
+      //         this.tmpScoreByCategory.record(f, sub, 0); // matched with major
+      //       } else {
+      //         this.tmpScoreByCategory.record(f, 0, sub); // mismatch with minor
+      //       }
+      //     } else {
+      //       if (sub > 0) {
+      //         this.tmpScoreByCategory.record(f, 0, sub); // matched with minor
+      //       } else {
+      //         this.tmpScoreByCategory.record(f, sub, 0); // mismatch with major
+      //       }
+      //     }
+      //     if (sub > 0) {
+      //       s += sub;
+      //     }
+      //   }
+      // }
 
-      this.tmpScore = Math.round(s);
-      this.tmpBonus = 0;
+      // this.tmpScore = Math.round(s);
+      // this.tmpBonus = 0;
 
-      if (filters.bonus) {
-        var total = 0;
-        for (var i in filters.bonus) {
-          var bonus = filters.bonus[i];
-          var resultlist = bonus.filter(this);
-          var result = resultlist[0];
-          if (result > 0) {
-            // result > 0 means match
-            this.bonusByCategory.addRaw(filters, resultlist[1]);
-            total += result;
-            if (bonus.replace) {
-              this.tmpScore /= 10;
-              this.tmpScoreByCategory.f();
-            }
-          }
-        }
-        this.tmpBonus = total;
-        this.tmpScore += total;
-      }
+      // if (filters.bonus) {
+      //   var total = 0;
+      //   for (var i in filters.bonus) {
+      //     var bonus = filters.bonus[i];
+      //     var resultlist = bonus.filter(this);
+      //     var result = resultlist[0];
+      //     if (result > 0) {
+      //       // result > 0 means match
+      //       this.bonusByCategory.addRaw(filters, resultlist[1]);
+      //       total += result;
+      //       if (bonus.replace) {
+      //         this.tmpScore /= 10;
+      //         this.tmpScoreByCategory.f();
+      //       }
+      //     }
+      //   }
+      //   this.tmpBonus = total;
+      //   this.tmpScore += total;
+      // }
       if (this.type.needFilter() && currentLevel && currentLevel.filter) {
         currentLevel.filter.filter(this);
       }
-      this.tmpScore = Math.round(this.tmpScore);   
-      this.tmpBonus = Math.round(this.tmpBonus);
-      if (filters.boost1 == null && filters.boost2 == null) {
-        this.totalScore = this.tmpScore;
-        this.totalBonus = this.tmpBonus;
-      } else {
-        var boosted = this.boost(filters.boost1, filters.boost2);
-        this.totalScore = Math.round(boosted[0] + boosted[1]);
-        this.totalBonus = Math.round(boosted[1]);
-      }
-    },
-    boost: function(boost1, boost2) {
-      return [this.tmpScoreByCategory.boost(boost1, boost2), this.bonusByCategory.boost(boost1, boost2)];
+      // this.tmpScore = Math.round(this.tmpScore);   
+      // this.tmpBonus = Math.round(this.tmpBonus);
+      // if (filters.boost1 == null && filters.boost2 == null) {
+      //   this.totalScore = this.tmpScore;
+      //   this.totalBonus = this.tmpBonus;
+      // } else {
+      //   var boosted = this.boost(filters.boost1, filters.boost2);
+      //   this.totalScore = Math.round(boosted[0] + boosted[1]);
+      //   this.totalBonus = Math.round(boosted[1]);
+      // }
     }
+    // ,
+    // boost: function(boost1, boost2) {
+    //   return [this.tmpScoreByCategory.boost(boost1, boost2), this.bonusByCategory.boost(boost1, boost2)];
+    // }
   };
 }
 
-function ScoreByCategory() {
-  var initial = {};
-  for (var c in FEATURES) {
-    initial[FEATURES[c]] = [0, 0];
-  }
-  return {
-    scores: initial,
-    // score: positive - matched, negative - no matched
-    record: function(category, major, minor) {
-      this.scores[category] = [major, minor];
-    },
-    clear: function() {
-      for (var c in this.scores) {
-        initial[c][0] = 0;
-        initial[c][1] = 0;
-      }
-    },
-    add: function(other) {
-      if (other) {
-        for (var c in other.scores) {
-          this.scores[c][0] += other.scores[c][0];
-          this.scores[c][1] += other.scores[c][1];
-        }
-      }
-    },
-    round: function() {
-      for (var c in this.scores) {
-        this.scores[c][0] = Math.round(this.scores[c][0]);
-        this.scores[c][1] = Math.round(this.scores[c][1]);
-      }
-    },
-    addRaw: function(filters, rawdata) {
-      for (var i in FEATURES) {
-        var f = FEATURES[i]; 
-        if (filters[f] && rawdata[f] > 0) {
-          if (filters[f] > 0) { // level requires major
-            this.scores[f][0] += rawdata[f];
-          } else { // level requires minor
-            this.scores[f][1] += rawdata[f];
-          }
-        }
-      }
-    },
-    boost: function(boost1, boost2) {
-      var total = 0;
-      for (var f in this.scores) {
-        //var f = FEATURES[i];
-        var score = Math.max(this.scores[f][0], this.scores[f][1]);
-        if (boost1 == f) {
-          score *= 1.27;
-        } else if (boost2 == f) {
-          score *= 1.778;
-        }
-        total += score;
-      }
-      return total;
-    },
-    f: function() {
-      for (var c in this.scores) {
-        this.scores[c][0] /= 10;
-        this.scores[c][1] /= 10;
-      }
-    }
-  };
-}
+// function ScoreByCategory() {
+//   var initial = {};
+//   for (var c in FEATURES) {
+//     initial[FEATURES[c]] = [0, 0];
+//   }
+//   return {
+//     scores: initial,
+//     // score: positive - matched, negative - no matched
+//     record: function(category, major, minor) {
+//       this.scores[category] = [major, minor];
+//     },
+//     clear: function() {
+//       for (var c in this.scores) {
+//         initial[c][0] = 0;
+//         initial[c][1] = 0;
+//       }
+//     },
+//     add: function(other) {
+//       if (other) {
+//         for (var c in other.scores) {
+//           this.scores[c][0] += other.scores[c][0];
+//           this.scores[c][1] += other.scores[c][1];
+//         }
+//       }
+//     },
+//     round: function() {
+//       for (var c in this.scores) {
+//         this.scores[c][0] = Math.round(this.scores[c][0]);
+//         this.scores[c][1] = Math.round(this.scores[c][1]);
+//       }
+//     },
+//     addRaw: function(filters, rawdata) {
+//       for (var i in FEATURES) {
+//         var f = FEATURES[i]; 
+//         if (filters[f] && rawdata[f] > 0) {
+//           if (filters[f] > 0) { // level requires major
+//             this.scores[f][0] += rawdata[f];
+//           } else { // level requires minor
+//             this.scores[f][1] += rawdata[f];
+//           }
+//         }
+//       }
+//     },
+//     boost: function(boost1, boost2) {
+//       var total = 0;
+//       for (var f in this.scores) {
+//         //var f = FEATURES[i];
+//         var score = Math.max(this.scores[f][0], this.scores[f][1]);
+//         if (boost1 == f) {
+//           score *= 1.27;
+//         } else if (boost2 == f) {
+//           score *= 1.778;
+//         }
+//         total += score;
+//       }
+//       return total;
+//     },
+//     f: function() {
+//       for (var c in this.scores) {
+//         this.scores[c][0] /= 10;
+//         this.scores[c][1] /= 10;
+//       }
+//     }
+//   };
+// }
 
 function MyClothes() {
   return {
@@ -506,156 +498,156 @@ var clothesSet = function() {
   return ret;
 }();
 
-var clothesRanking = function() {
-  var ret = {};
-  for (var i in clothes) {
-    var t = clothes[i].type.type;
-    if (!ret[t]) {
-      ret[t] = [];
-    }
-    ret[t].push(clothes[i]);
-  }
-  return ret;
-}();
-var shoppingCart = ShoppingCart();
-function ShoppingCart() {
-  return {
-    cart: {},
-    totalScore: fakeClothes(this.cart),
-    clear: function() {
-      this.cart = {};
-    },
-    contains: function(c) {
-      return this.cart[c.type.type] == c;
-    },
-    remove: function(c) {
-      delete this.cart[c];
-    },
-    putAll: function(clothes) {
-      for (var i in clothes) {
-        this.put(clothes[i]);
-      }
-    },
-    put: function(c) {
-      this.cart[c.type.type] = c;
-    },
-    toList: function(sortBy) {
-      var ret = [];
-      for (var t in this.cart) {
-        ret.push(this.cart[t]);
-      }
-      return ret.sort(sortBy);
-    },
-    getScore: function(cate) {
-      if (this.cart[cate]) {
-        return this.cart[cate].tmpScore;
-      }
-      return 0;
-    },
-    calc: function(boost1, boost2) {
-      /*
-      for (var c in this.cart) {
-        this.cart[c].calc(criteria);
-      }
-      */
-      // fake a clothes
-      this.totalScore = fakeClothes(this.cart, boost1, boost2);
-    }
-  }
-};
+// var clothesRanking = function() {
+//   var ret = {};
+//   for (var i in clothes) {
+//     var t = clothes[i].type.type;
+//     if (!ret[t]) {
+//       ret[t] = [];
+//     }
+//     ret[t].push(clothes[i]);
+//   }
+//   return ret;
+// }();
+// var shoppingCart = ShoppingCart();
+// function ShoppingCart() {
+//   return {
+//     cart: {},
+//     totalScore: fakeClothes(this.cart),
+//     clear: function() {
+//       this.cart = {};
+//     },
+//     contains: function(c) {
+//       return this.cart[c.type.type] == c;
+//     },
+//     remove: function(c) {
+//       delete this.cart[c];
+//     },
+//     putAll: function(clothes) {
+//       for (var i in clothes) {
+//         this.put(clothes[i]);
+//       }
+//     },
+//     put: function(c) {
+//       this.cart[c.type.type] = c;
+//     },
+//     toList: function(sortBy) {
+//       var ret = [];
+//       for (var t in this.cart) {
+//         ret.push(this.cart[t]);
+//       }
+//       return ret.sort(sortBy);
+//     },
+//     getScore: function(cate) {
+//       if (this.cart[cate]) {
+//         return this.cart[cate].tmpScore;
+//       }
+//       return 0;
+//     },
+//     calc: function(boost1, boost2) {
+//       /*
+//       for (var c in this.cart) {
+//         this.cart[c].calc(criteria);
+//       }
+//       */
+//       // fake a clothes
+//       this.totalScore = fakeClothes(this.cart, boost1, boost2);
+//     }
+//   }
+// };
 
-function accScore(total, totalBonus, items) {
-  if (items < ACCRATIO.length) {
-    return (total - totalBonus) * ACCRATIO[items] + totalBonus;
-  }
-  return (total - totalBonus) * 0.4 + totalBonus;
-}
+// function accScore(total, totalBonus, items) {
+//   if (items < ACCRATIO.length) {
+//     return (total - totalBonus) * ACCRATIO[items] + totalBonus;
+//   }
+//   return (total - totalBonus) * 0.4 + totalBonus;
+// }
 
-function fakeClothes(cart, boost1, boost2) {
-  var totalScore = 0;
-  var totalAccessoriesBonus = 0;
-  var totalAccessories = 0;
-  var totalScoreByCategory = ScoreByCategory();
-  var totalBonusByCategory = ScoreByCategory();
-  var totalAccessoriesByCategory = ScoreByCategory();
-  var totalAccessoriesBonusByCategory = ScoreByCategory();
-  var numAccessories = 0;
-  for (var c in cart) {
-    if (c.split('-')[0] == "饰品") {
-      totalAccessories += cart[c].tmpScore;
-      totalAccessoriesBonus += cart[c].tmpBonus;
-      totalAccessoriesByCategory.add(cart[c].tmpScoreByCategory);
-      totalAccessoriesBonusByCategory.add(cart[c].bonusByCategory);
-      numAccessories ++;
-    } else {
-      totalScore += cart[c].tmpScore;
-      totalScoreByCategory.add(cart[c].tmpScoreByCategory);
-      totalBonusByCategory.add(cart[c].bonusByCategory);
-    }
-  }
-  totalScore += accScore(totalAccessories, totalAccessoriesBonus, numAccessories);
-  for (var c in totalAccessoriesByCategory.scores) {
-    totalAccessoriesByCategory.scores[c][0] = accScore(totalAccessoriesByCategory.scores[c][0], 0,
-        numAccessories);
-    totalAccessoriesByCategory.scores[c][1] = accScore(totalAccessoriesByCategory.scores[c][1], 0,
-        numAccessories);
-    totalAccessoriesBonusByCategory.scores[c][0] = totalAccessoriesBonusByCategory.scores[c][0]; // WTF...bonus never chagnes
-    totalAccessoriesBonusByCategory.scores[c][1] = totalAccessoriesBonusByCategory.scores[c][1];
-  }
-  totalScoreByCategory.add(totalAccessoriesByCategory);
-  totalBonusByCategory.add(totalAccessoriesBonusByCategory);
-  totalScoreByCategory.round();
-  totalBonusByCategory.round();
+// function fakeClothes(cart, boost1, boost2) {
+//   var totalScore = 0;
+//   var totalAccessoriesBonus = 0;
+//   var totalAccessories = 0;
+//   var totalScoreByCategory = ScoreByCategory();
+//   var totalBonusByCategory = ScoreByCategory();
+//   var totalAccessoriesByCategory = ScoreByCategory();
+//   var totalAccessoriesBonusByCategory = ScoreByCategory();
+//   var numAccessories = 0;
+//   for (var c in cart) {
+//     if (c.split('-')[0] == "饰品") {
+//       totalAccessories += cart[c].tmpScore;
+//       totalAccessoriesBonus += cart[c].tmpBonus;
+//       totalAccessoriesByCategory.add(cart[c].tmpScoreByCategory);
+//       totalAccessoriesBonusByCategory.add(cart[c].bonusByCategory);
+//       numAccessories ++;
+//     } else {
+//       totalScore += cart[c].tmpScore;
+//       totalScoreByCategory.add(cart[c].tmpScoreByCategory);
+//       totalBonusByCategory.add(cart[c].bonusByCategory);
+//     }
+//   }
+//   totalScore += accScore(totalAccessories, totalAccessoriesBonus, numAccessories);
+//   for (var c in totalAccessoriesByCategory.scores) {
+//     totalAccessoriesByCategory.scores[c][0] = accScore(totalAccessoriesByCategory.scores[c][0], 0,
+//         numAccessories);
+//     totalAccessoriesByCategory.scores[c][1] = accScore(totalAccessoriesByCategory.scores[c][1], 0,
+//         numAccessories);
+//     totalAccessoriesBonusByCategory.scores[c][0] = totalAccessoriesBonusByCategory.scores[c][0]; // WTF...bonus never chagnes
+//     totalAccessoriesBonusByCategory.scores[c][1] = totalAccessoriesBonusByCategory.scores[c][1];
+//   }
+//   totalScoreByCategory.add(totalAccessoriesByCategory);
+//   totalBonusByCategory.add(totalAccessoriesBonusByCategory);
+//   totalScoreByCategory.round();
+//   totalBonusByCategory.round();
   
-  var scores = totalScoreByCategory.scores;
-  var bonus = totalBonusByCategory.scores;
-  return {
-    name: '总分',
-    tmpScore: Math.round(totalScore),
-    totalScore: Math.round(totalScoreByCategory.boost(boost1, boost2) + totalBonusByCategory.boost(boost1, boost2)),
-    toCsv: function() {
-      return ['', '', '',
-          scoreWithBonusTd(scores.simple[0], bonus.simple[0], boost1 == 'simple', boost2 == 'simple'), 
-          scoreWithBonusTd(scores.simple[1], bonus.simple[1], boost1 == 'simple', boost2 == 'simple'),
-          scoreWithBonusTd(scores.cute[0], bonus.cute[0], boost1 == 'cute', boost2 == 'cute'),
-          scoreWithBonusTd(scores.cute[1], bonus.cute[1], boost1 == 'cute', boost2 == 'cute'),
-          scoreWithBonusTd(scores.active[0], bonus.active[0], boost1 == 'active', boost2 == 'active'),
-          scoreWithBonusTd(scores.active[1], bonus.active[1], boost1 == 'active', boost2 == 'active'),
-          scoreWithBonusTd(scores.pure[0], bonus.pure[0], boost1 == 'pure', boost2 == 'pure'),
-          scoreWithBonusTd(scores.pure[1], bonus.pure[1], boost1 == 'pure', boost2 == 'pure'),
-          scoreWithBonusTd(scores.cool[0], bonus.cool[0], boost1 == 'cool', boost2 == 'cool'),
-          scoreWithBonusTd(scores.cool[1], bonus.cool[1], boost1 == 'cool', boost2 == 'cool'), '', ''];
-    }
-  };
-}
+//   var scores = totalScoreByCategory.scores;
+//   var bonus = totalBonusByCategory.scores;
+//   return {
+//     name: '总分',
+//     tmpScore: Math.round(totalScore),
+//     totalScore: Math.round(totalScoreByCategory.boost(boost1, boost2) + totalBonusByCategory.boost(boost1, boost2)),
+//     toCsv: function() {
+//       return ['', '', '',
+//           scoreWithBonusTd(scores.simple[0], bonus.simple[0], boost1 == 'simple', boost2 == 'simple'), 
+//           scoreWithBonusTd(scores.simple[1], bonus.simple[1], boost1 == 'simple', boost2 == 'simple'),
+//           scoreWithBonusTd(scores.cute[0], bonus.cute[0], boost1 == 'cute', boost2 == 'cute'),
+//           scoreWithBonusTd(scores.cute[1], bonus.cute[1], boost1 == 'cute', boost2 == 'cute'),
+//           scoreWithBonusTd(scores.active[0], bonus.active[0], boost1 == 'active', boost2 == 'active'),
+//           scoreWithBonusTd(scores.active[1], bonus.active[1], boost1 == 'active', boost2 == 'active'),
+//           scoreWithBonusTd(scores.pure[0], bonus.pure[0], boost1 == 'pure', boost2 == 'pure'),
+//           scoreWithBonusTd(scores.pure[1], bonus.pure[1], boost1 == 'pure', boost2 == 'pure'),
+//           scoreWithBonusTd(scores.cool[0], bonus.cool[0], boost1 == 'cool', boost2 == 'cool'),
+//           scoreWithBonusTd(scores.cool[1], bonus.cool[1], boost1 == 'cool', boost2 == 'cool'), '', ''];
+//     }
+//   };
+// }
 
-function scoreWithBonusTd(score, bonus, isBoost1, isBoost2) {
-  scoreLabel = score + '<br/>+' + bonus;
-  if (score > 0) {
-    if (isBoost1) {
-      return "<span class='red'>1.27x</span>" + "<div>(" + scoreLabel + ")</div>";
-    } else if (isBoost2) {
-      return "<span class='red'>1.778x</span>" + "<div>(" + scoreLabel + ")</div>";
-    }
-  } 
-  return scoreLabel;
-}
+// function scoreWithBonusTd(score, bonus, isBoost1, isBoost2) {
+//   scoreLabel = score + '<br/>+' + bonus;
+//   if (score > 0) {
+//     if (isBoost1) {
+//       return "<span class='red'>1.27x</span>" + "<div>(" + scoreLabel + ")</div>";
+//     } else if (isBoost2) {
+//       return "<span class='red'>1.778x</span>" + "<div>(" + scoreLabel + ")</div>";
+//     }
+//   } 
+//   return scoreLabel;
+// }
 
-function realRating(a, b, realScoreA, realScoreB, type) {
-  real = a ? a : b;
-  realScore = a ? realScoreA : realScoreB;
-  symbol = a ? 1 : -1;
-  score = symbol * type.score[real];
-  dev = type.deviation[real];
-  if (realScore) {
-    score = symbol * realScore;
-    dev = 0;
-  } else {
-    score = symbol * type.score[real];  
-    dev = type.deviation[real];
-  }
-  return [a, b, score, dev];
-}
+// function realRating(a, b, realScoreA, realScoreB, type) {
+//   real = a ? a : b;
+//   realScore = a ? realScoreA : realScoreB;
+//   symbol = a ? 1 : -1;
+//   score = symbol * type.score[real];
+//   dev = type.deviation[real];
+//   if (realScore) {
+//     score = symbol * realScore;
+//     dev = 0;
+//   } else {
+//     score = symbol * type.score[real];  
+//     dev = type.deviation[real];
+//   }
+//   return [a, b, score, dev];
+// }
 
 function parseSource(source, key) {
   var idx = source.indexOf(key);
@@ -761,16 +753,12 @@ function save() {
   return myClothes;
 }
 
-
-
 function byName(a, b) {
   return a.name.localeCompare(b.name);
 }
 function byString(a, b) {
   return a.localeCompare(b);
 }
-
-
 
 function calcNum(numParent, num, keep) {
   if (numParent == 0) return 0; // after all, you don't need any deps if goal is already fulfilled
@@ -855,12 +843,6 @@ function processSources() {
   }
 }
 
-
-
-
-
-
-
 function resourceSize() {
   var size = 0;
   for (var cate in resourceSet) {
@@ -878,8 +860,6 @@ function visit(node, collector) {
   }
 }
 
-
-
 function taskList(nodes) {
   var ret = "<table class='breakdown'><thead><tr><th>名称</th><th>来源</th><th>需求数量</th></tr></thead>";
   // ret += "<tbody>";
@@ -896,50 +876,6 @@ function taskList(nodes) {
   // ret += "</tbody></table>";
   return ret;
 }
-
-// function addRel(ret,root){
-//     if(!!root){
-//         for (var i in root.deps) {
-//             var node = root.deps[i];
-//             var name = clothesSet[node.category][node.id];
-//             var number = Math.max(node.getNumber() - node.inventory, 0);
-//             if (!ret[node.category+node.id]) {
-//                 ret[node.category+node.id] = {};
-//             }
-//             if (!ret[node.category+node.id][root.category+root.id]) {
-//                 ret[node.category+node.id][node.category+root.id] = [];
-//             }
-//             ret[node.category+node.id][node.category+root.id]+=number;
-//             addRel(node);
-//         }
-//     }
-// };
-
-// var relationSet = function() {
-//     ret = {}
-//     var cnt = 0;
-//     for(var i in CATEGORIES){
-//         var type =CATEGORIES[i];
-//         var t =clothesSet[type];
-//         for (var j in t){
-//             var p = t[j];
-//             var root = Resource(type, p.id);
-//             root.ref['request'] = 1;
-//             root.require['request'] = true;
-//             root.keep = 0;
-//             resourceSet = {};
-//             deps(root);
-//             //  summary(root);
-//             var theme = 0;
-//             var sameTheme = resourceSize() < 20;
-            
-//             addRel(ret,root);
-            
-//         }
-//     }
-    
-//     return ret;
-// }();
 
 //0:进化，1：设计图；2：定制
 rel=function(source,target,num,type){
