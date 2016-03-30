@@ -20,11 +20,9 @@ var global = {
 };
 
 // for table use
-function thead( score) {
+function thead() {
   var ret = "<tr>";
-  if (score) {
-    ret += "<th class='score'>分数</th>";
-  }
+
   
   ret += "<th class='name'>名称</th>\
   <th class='category'>类别</th>\
@@ -134,7 +132,7 @@ function drawTable(data, div) {
   if ($('#' + div + ' table').length == 0) {
     $('#' + div).html("<table class='mainTable'><thead></thead><tbody></tbody></table>");
   }
-  $('#' + div + ' table thead').html(thead( !global.isFilteringMode));
+  $('#' + div + ' table thead').html(thead());
   $('#' + div + ' table tbody').html(list(data));
 
   $('span.paging').html("<button class='destoryFloat'></button>");
