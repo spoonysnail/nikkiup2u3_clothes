@@ -152,7 +152,7 @@ function MyClothes() {
                 this.mineCnt[type]={};
             
             for(var j in this.mineStr){
-                var tmp = this.mineStr[j].split('-')
+                var tmp = this.mineStr[j].split('-');
                 this.mine[type][j]= tmp[0];
                 this.mineCnt[type][j] = tmp.length > 1 ? tmp[1]:1;
             }
