@@ -97,6 +97,8 @@ function row(piece) {
   for (var i in csv) {
     ret += td(render(csv[i]), getStyle(csv[i]));
   }
+  var input = $("<input type='textbox' size=4 value='" + node.inventory + "'/>");
+  ret += td(input,'keepInput');  
   return tr(ret);
 }
 
