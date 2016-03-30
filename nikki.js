@@ -374,6 +374,7 @@ function moreLink(cate) {
 function init() {
   var mine = loadFromStorage();
   calcDependencies();
+  drawFilter();
   drawImport();
   switchCate(category[0]);
   updateSize(mine);
