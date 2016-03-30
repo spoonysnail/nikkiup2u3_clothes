@@ -985,23 +985,18 @@ function calRel(source){
     var flag = clothesSet[sourceCate][sourceId].own?0:1;
     if(!relInfoSet[source]) return flag;
     var res = 1;
-    var customizeCnt = 0;
     for(var i in relInfoSet[source]){
         var num = relInfoSet[source][i].num;
         var type =relInfoSet[source][i].type;
-        var target = relInfoSet[source][i].target;
-        var targetCate = target.split('-')[0];
-        var targetId = target.split('-')[1];
-        var t_flag = clothesSet[targetCate][targetId].own;
-       
-        var customizeFlag = type==2 && !t_flag;
-        if(customizeFlag)
-            customizeCnt+=calRel(relInfoSet[source][i].target);
- 
-       res += (calRel(relInfoSet[source][i].target))*(num-1);
+
+        //判断是否为定制
+        if(type==2)
+            res+=calRel(relInfoSet[source][i].target);
+        else
+            res += (calRel(relInfoSet[source][i].target))*(num-1);
+
     }
-  
-    res += customizeCnt-!flag;
-    
+
+    res -= !flag;
     return res;
 }
