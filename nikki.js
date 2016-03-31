@@ -294,7 +294,7 @@ function onChangeCriteria() {
 function byId(a, b) {
   var aid = parseInt(a.id);
   var bid = parseInt(b.id);
-  return aid > bid ? -1 : (aid < bid ? 1 : 0);
+  return aid < bid ? -1 : (aid > bid ? 1 : 0);
 }
 
 function loadCustomInventory() {
