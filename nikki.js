@@ -238,7 +238,9 @@ function matches(c, criteria, filters) {
 }
 
 function byId(a, b) {
-  return a.id > b.id ? -1 : (a.id < b.id ? 1 : 0);
+  var aid = parseInt(a.id);
+  var bid = parseInt(b.id);
+  return aid > bid ? -1 : (aid < bid ? 1 : 0);
 }
 
 function loadCustomInventory() {
