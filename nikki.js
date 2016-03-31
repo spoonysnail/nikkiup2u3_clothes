@@ -189,7 +189,9 @@ function byFirst(a, b) {
 var criteria={};
 var uiFilter = {};
 var starFilter={};
+var decomposeFilter={};
 var isDecomposable = false;
+var isStarfiltering = false;
 
 function onChangeUiFilter() {
   uiFilter = {};
@@ -209,11 +211,22 @@ function onChangeUiFilter() {
   refreshTable(criteria);
 }
 
-function onChangeDecompose() {
+function onChangeDecomposeStar() {
   starFilter = {};
+  isStarfiltering = false;
+  $('input[name=decomposable_star]:checked').each(function() {
+    starFilter[$(this).val()] = true;
+    isStarfiltering = true;
+  });
+  
+  refreshTable(criteria);
+}
+
+function onChangeDecompose() {
+  decomposeFilter = {};
   isDecomposable = false;
   $('input[name=decomposable]:checked').each(function() {
-    starFilter[$(this).val()] = true;
+    decomposeFilter[$(this).val()] = true;
     isDecomposable = true;
   });
   
@@ -223,13 +236,13 @@ function onChangeDecompose() {
 var STAR = ["oneS", "twoS", "threeS", "fourS", "fiveS","sixS"];
 var starLevel =['1','2','3','4','5','6'];
 function refreshTable(criteria) {
-  drawTable(filtering(criteria, uiFilter,starFilter), "clothes", false, null);
+  drawTable(filtering(criteria, uiFilter,decomposeFilter,starFilter), "clothes", false, null);
 }
 
-function filtering(criteria, uifilters,starfilters) {
+function filtering(criteria, uifilters,decomposefilters,starfilters) {
   var result = [];
   for (var i in clothes) {
-    if (matches(clothes[i], criteria, uifilters,starfilters)) {
+    if (matches(clothes[i], criteria, uifilters,decomposefilters,starfilters)) {
       result.push(clothes[i]);
     }
   }
@@ -239,25 +252,46 @@ function filtering(criteria, uifilters,starfilters) {
   return result;
 }
 
-function matches(c, criteria, uifilters,starfilters) {
-  if(isDecomposable){
-    if(!(c.own&& uifilters[c.type.type]))
-      return false;
-    
-    if((c.getDeps('').indexOf('(缺)') < 0 || calRel(c.type.mainType+'-'+c.id) <= 0)){
-      for (var i in STAR){
-        var s = starLevel[i];
-        if(starfilters[STAR[i]] && c.stars == s)
-          return true;
-      }
-    }
-    //不可分解
-    if(starfilters['NO'] &&c.getDeps('').indexOf('(缺)') >0 )
-      return true;
+function matches(c, criteria, uifilters,decomposefilters,starfilters) {
+  var flag = false;
+  if(!uifilters[c.type.type])
     return false;
+  
+  if(isStarfiltering){
+    for (var i in STAR){
+        var s = starLevel[i];
+        if(starfilters[STAR[i]] && c.stars == s){
+          flag=true;
+          break;
+        }
+      }
   }
   
-  return ((c.own && uifilters.own) || (!c.own && uifilters.missing)) && uifilters[c.type.type];
+  if(isDecomposable&&c.own){
+    var decomposeFlag = !(!decomposefilters["can"]);
+    var ind = c.getDeps('').indexOf('(缺)');
+    flag = flag &&( decomposeFlag ? (ind < 0 || calRel(c.type.mainType+'-'+c.id) <= 0):ind>0)
+    return flag;
+  }
+  
+  // if(isDecomposable){
+  //   if(!(c.own&& uifilters[c.type.type]))
+  //     return false;
+    
+  //   if((c.getDeps('').indexOf('(缺)') < 0 || calRel(c.type.mainType+'-'+c.id) <= 0)){
+  //     for (var i in STAR){
+  //       var s = starLevel[i];
+  //       if(starfilters[STAR[i]] && c.stars == s)
+  //         return true;
+  //     }
+  //   }
+    //不可分解
+  //   if(starfilters['NO'] &&c.getDeps('').indexOf('(缺)') >0 )
+  //     return true;
+  //   return false;
+  // }
+  
+  return ((c.own && uifilters.own) || (!c.own && uifilters.missing)) ;
 }
 
 function changeFilter() {
