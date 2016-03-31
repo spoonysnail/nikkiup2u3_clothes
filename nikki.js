@@ -229,7 +229,6 @@ function onChangeDecompose() {
     decomposeFilter[$(this).val()] = true;
     isDecomposable = true;
   });
-  
   refreshTable(criteria);
 }
 
