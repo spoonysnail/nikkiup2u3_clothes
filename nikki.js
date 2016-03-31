@@ -290,7 +290,7 @@ function matches(c, criteria, uifilters,decomposefilters,starfilters) {
   //   return false;
   // }
   
-  return ((c.own && uifilters.own) || (!c.own && uifilters.missing)) && (（flag&&isStarfiltering)||(!flag&&!isStarfiltering));
+  return ((c.own && uifilters.own) || (!c.own && uifilters.missing)) &&((flag&&isStarfiltering)||(!flag&&!isStarfiltering));
 }
 
 function changeFilter() {
