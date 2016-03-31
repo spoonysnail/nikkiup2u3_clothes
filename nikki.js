@@ -266,10 +266,10 @@ function matches(c, criteria, uifilters,decomposefilters,starfilters) {
       }
   }
   
-  if(isDecomposable&&c.own){
+  if(isDecomposable){
     var decomposeFlag = !(!decomposefilters["can"]);
     var ind = c.getDeps('').indexOf('(缺)');
-    flag = flag &&( decomposeFlag ? (ind < 0 || calRel(c.type.mainType+'-'+c.id) <= 0):ind>0)
+    flag = flag &&( decomposeFlag ? (ind < 0 || calRel(c.type.mainType+'-'+c.id) <= 0):ind>0) && c.own;
     return flag;
   }
   
