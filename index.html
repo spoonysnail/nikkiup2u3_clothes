@@ -324,14 +324,18 @@
           <input type="checkbox" name="inventory" value="missing" onClick="onChangeUiFilter()" checked /> 没有
         </div>
         <div>
-          <span>可分解: &nbsp;</span>
-          <input type="checkbox" name="decomposable" value="oneS" onclick="onChangeDecompose()"/>一星
-          <input type="checkbox" name="decomposable" value="twoS"  onclick="onChangeDecompose()"/>二星
-          <input type="checkbox" name="decomposable" value="threeS" onclick="onChangeDecompose()"/>三星
-          <input type="checkbox" name="decomposable" value="fourS" onclick="onChangeDecompose()"/> 四星
-          <input type="checkbox" name="decomposable" value="fiveS" onclick="onChangeDecompose()"/>五星
-          <input type="checkbox" name="decomposable" value="sixS" onclick="onChangeDecompose()"/>六星
-          <input type="checkbox" name="decomposable" value="NO" onclick="onChangeDecompose()"/>已拥有不可分解
+           <span>已拥有： &nbsp;</span>
+          <input type="checkbox" name="decomposable" value="can" onclick="onChangeDecompose()"/>可分解
+          <input type="checkbox" name="decomposable" value="cannot" onclick="onChangeDecompose()"/>不可分解
+        </div>
+        <div>
+          <span>星级: &nbsp;&nbsp;&nbsp;</span>
+          <input type="checkbox" name="decomposable_star" value="oneS" onclick="onChangeDecomposeStar()"/>一星
+          <input type="checkbox" name="decomposable_star" value="twoS"  onclick="onChangeDecomposeStar()"/>二星
+          <input type="checkbox" name="decomposable_star" value="threeS" onclick="onChangeDecomposeStar()"/>三星
+          <input type="checkbox" name="decomposable_star" value="fourS" onclick="onChangeDecomposeStar()"/> 四星
+          <input type="checkbox" name="decomposable_star" value="fiveS" onclick="onChangeDecomposeStar()"/>五星
+          <input type="checkbox" name="decomposable_star" value="sixS" onclick="onChangeDecomposeStar()"/>六星
         </div>
       </form>
     </div>
