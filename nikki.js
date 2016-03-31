@@ -146,7 +146,7 @@ function getStyle(rating) {
 
 function list(rows) {
   ret = "";
-  for (var i = rows.length-1;i>0;i--) {
+  for (var i in rows) {
     ret += row(rows[i]);
   }
 
