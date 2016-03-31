@@ -240,25 +240,20 @@ function filtering(criteria, uifilters,starfilters) {
 }
 
 function matches(c, criteria, uifilters,starfilters) {
-  // only filter by feature when filtering
-  // if (global.isFilteringMode) {
-  //   for (var i in FEATURES) {
-  //     var f = FEATURES[i];
-  //     if (criteria[f] && criteria[f] * c[f][2] < 0) {
-  //       return false;
-  //     }
-  //   }
-  // }
   if(isDecomposable){
-    if(c.own&& uifilters[c.type.type] && (c.getDeps('').indexOf('(缺)') < 0 || calRel(c.type.mainType+'-'+c.id) <= 0)){
+    if(!(c.own&& uifilters[c.type.type]))
+      return false;
+    
+    if((c.getDeps('').indexOf('(缺)') < 0 || calRel(c.type.mainType+'-'+c.id) <= 0)){
       for (var i in STAR){
         var s = starLevel[i];
         if(starfilters[STAR[i]] && c.stars == s)
           return true;
       }
     }
-    
-    return false;
+    //不可分解
+    if(starfilters['NO'] &&c.getDeps('').indexOf('(缺)') >0 )
+      return true;
     
   }
   
