@@ -94,7 +94,7 @@ function clickableTd(piece) {
   return "<td id='clickable-" + (type + id) + "' class='" + cls
       + "'><a href='#dummy' class='button' " + tooltip
       + "onClick='toggleInventory(\"" + type + "\",\"" + id + "\")'>"
-      + name + "&nbsp;"+calRel(type+'-'+id) + "</a></td>";
+      + name  + "</a></td>";
 }
 
 function row(piece) {
