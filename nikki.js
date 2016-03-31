@@ -188,6 +188,7 @@ function byFirst(a, b) {
 }
 var criteria={};
 var uiFilter = {};
+var isDecomposable = false;
 
 function onChangeUiFilter() {
   uiFilter = {};
@@ -206,6 +207,19 @@ function onChangeUiFilter() {
   }
   refreshTable(criteria);
 }
+
+function onChangeDecompose() {
+  uiFilter = {};
+  isDecomposable = false;
+  $('input[name=decomposable]:checked').each(function() {
+    uiFilter[$(this).val()] = true;
+    isDecomposable = true;
+  });
+  
+  refreshTable(criteria);
+}
+
+
 
 function refreshTable(criteria) {
   drawTable(filtering(criteria, uiFilter), "clothes", false, null);
@@ -235,6 +249,37 @@ function matches(c, criteria, filters) {
   //   }
   // }
   return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type.type];
+}
+
+function changeFilter() {
+  $("#theme")[0].options[0].selected = true;
+  currentLevel = null;
+  onChangeCriteria();
+}
+
+function onChangeCriteria() {
+  criteria = {};
+  for (var i in FEATURES) {
+    var f = FEATURES[i];
+    var weight = parseFloat($('#' + f + "Weight").val());
+    if (!weight) {
+      weight = 1;
+    }
+    var checked = $('input[name=' + f + ']:radio:checked');
+    if (checked.length) {
+      criteria[f] = parseInt(checked.val()) * weight;
+    }
+  }
+  tagToBonus(criteria, 'tag1');
+  tagToBonus(criteria, 'tag2');
+  if (global.additionalBonus && global.additionalBonus.length > 0) {
+    criteria.bonus = global.additionalBonus;
+  }
+  if (!global.isFilteringMode) {
+    refreshBoost(criteria);
+    setBoost(criteria, global.boostType);
+  }
+  calculateScore(criteria);
 }
 
 function byId(a, b) {
