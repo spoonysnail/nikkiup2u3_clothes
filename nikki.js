@@ -188,6 +188,7 @@ function byFirst(a, b) {
 }
 var criteria={};
 var uiFilter = {};
+var starFilter={};
 var isDecomposable = false;
 
 function onChangeUiFilter() {
@@ -209,10 +210,10 @@ function onChangeUiFilter() {
 }
 
 function onChangeDecompose() {
-  uiFilter = {};
+  starFilter = {};
   isDecomposable = false;
   $('input[name=decomposable]:checked').each(function() {
-    uiFilter[$(this).val()] = true;
+    starFilter[$(this).val()] = true;
     isDecomposable = true;
   });
   
@@ -222,13 +223,13 @@ function onChangeDecompose() {
 var STAR = ["oneS", "twoS", "threeS", "fourS", "fiveS","sixS"];
 var starLevel =['1','2','3','4','5','6'];
 function refreshTable(criteria) {
-  drawTable(filtering(criteria, uiFilter), "clothes", false, null);
+  drawTable(filtering(criteria, uiFilter,starFilter), "clothes", false, null);
 }
 
-function filtering(criteria, filters) {
+function filtering(criteria, uifilters,starfilters) {
   var result = [];
   for (var i in clothes) {
-    if (matches(clothes[i], criteria, filters)) {
+    if (matches(clothes[i], criteria, uifilters,starfilters)) {
       result.push(clothes[i]);
     }
   }
@@ -238,7 +239,7 @@ function filtering(criteria, filters) {
   return result;
 }
 
-function matches(c, criteria, filters) {
+function matches(c, criteria, uifilters,starfilters) {
   // only filter by feature when filtering
   // if (global.isFilteringMode) {
   //   for (var i in FEATURES) {
@@ -249,10 +250,10 @@ function matches(c, criteria, filters) {
   //   }
   // }
   if(isDecomposable){
-    if(c.getDeps('').indexOf('(缺)') < 0 || calRel(c.type.mainType+'-'+c.id) <= 0){
+    if(c.own && (c.getDeps('').indexOf('(缺)') < 0 || calRel(c.type.mainType+'-'+c.id) <= 0)){
       for (var i in STAR){
         var s = starLevel[i];
-        if(filters[STAR[i]] && c.stars == s)
+        if(starfilters[STAR[i]] && c.stars == s)
           return true;
       }
     }
@@ -261,7 +262,7 @@ function matches(c, criteria, filters) {
     
   }
   
-  return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type.type];
+  return ((c.own && uifilters.own) || (!c.own && uifilters.missing)) && uifilters[c.type.type];
 }
 
 function changeFilter() {
