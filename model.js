@@ -425,10 +425,11 @@ function calRel(source){
         var type =relInfoSet[source][i].type;
         
         //判断是否为定制
+        var require = calRel(relInfoSet[source][i].target) > 0?calRel(relInfoSet[source][i].target):0;
         if(type==2)
-            res+=calRel(relInfoSet[source][i].target);
+            res+=require;
         else
-            res += (calRel(relInfoSet[source][i].target))*(num-1);
+            res += require*(num-1);
       //  console.log('%d : %s  %d',i,num,haveNum);
     }
     
