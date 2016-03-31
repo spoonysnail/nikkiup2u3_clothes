@@ -109,11 +109,12 @@ function row(piece) {
     ret += td(render(csv[i]), getStyle(csv[i]));
   }
   //ret+= "<input type='textbox' size=4 value='" + clothesSet[csv[0]][csv[1]].own?1:0 + "'/>";
-  var haveNum = clothesSet[csv[0].split('-')[0]][csv[1]].have;
-   ret+= "<td class='haveInput'><input id='have-" + (csv[0] + csv[1]) + "' type='textbox' size=6 onChange=updateRel(\""
-   +csv[0]+ "\",\"" + csv[1] + "\") value=' " + haveNum + "'\></td>";
+  var cate = csv[0].split('-')[0];
+  var haveNum = clothesSet[cate][csv[1]].have;
+   ret+= "<td class='haveInput'><input id='have-" + (cate + csv[1]) + "' type='textbox' size=6 onChange=updateRel(\""
+   +cate+ "\",\"" + csv[1] + "\") value=' " + haveNum + "'\></td>";
     
-  var res= calRel(csv[0]+'-'+csv[1]);
+  var res= calRel(cate+'-'+csv[1]);
   var require = res>0?res:0;
   var consume = res<0?-res:0;
   ret += td(require,'requireNum');
