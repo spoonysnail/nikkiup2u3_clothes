@@ -254,7 +254,7 @@ function matches(c, criteria, uifilters,starfilters) {
     //不可分解
     if(starfilters['NO'] &&c.getDeps('').indexOf('(缺)') >0 )
       return true;
-    
+    return false;
   }
   
   return ((c.own && uifilters.own) || (!c.own && uifilters.missing)) && uifilters[c.type.type];
