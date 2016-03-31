@@ -6,7 +6,7 @@ var CATEGORY_HIERARCHY = function() {
     var type = category[i].split('-')[0];
     if (!ret[type]) {
       ret[type] = [];
-    }
+    }row
     ret[type].push(category[i]);
   }
   return ret;
@@ -218,9 +218,9 @@ function filtering(criteria, filters) {
       result.push(clothes[i]);
     }
   }
-  if (global.isFilteringMode) {
+ // if (global.isFilteringMode) {
     result.sort(byId);
-  } 
+//  } 
   return result;
 }
 
@@ -238,7 +238,7 @@ function matches(c, criteria, filters) {
 }
 
 function byId(a, b) {
-  return a.id < b.id ? -1 : (a.id > b.id ? 1 : 0);
+  return a.id > b.id ? -1 : (a.id < b.id ? 1 : 0);
 }
 
 function loadCustomInventory() {
