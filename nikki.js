@@ -250,7 +250,7 @@ function matches(c, criteria, uifilters,starfilters) {
   //   }
   // }
   if(isDecomposable){
-    if(c.own && (c.getDeps('').indexOf('(缺)') < 0 || calRel(c.type.mainType+'-'+c.id) <= 0)){
+    if(c.own&& uifilters[c.type.type] && (c.getDeps('').indexOf('(缺)') < 0 || calRel(c.type.mainType+'-'+c.id) <= 0)){
       for (var i in STAR){
         var s = starLevel[i];
         if(starfilters[STAR[i]] && c.stars == s)
