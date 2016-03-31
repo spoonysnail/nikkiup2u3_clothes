@@ -219,8 +219,8 @@ function onChangeDecompose() {
   refreshTable(criteria);
 }
 
-
-
+var STAR = ["oneS", "twoS", "threeS", "fourS", "fiveS","sixS"];
+var starLevel =['1','2','3','4','5','6'];
 function refreshTable(criteria) {
   drawTable(filtering(criteria, uiFilter), "clothes", false, null);
 }
@@ -248,6 +248,19 @@ function matches(c, criteria, filters) {
   //     }
   //   }
   // }
+  if(isDecomposable){
+    if(c.getDeps('').indexOf('(缺)') < 0 || calRel(c.type.mainType+'-'+c.id) <= 0){
+      for (var i in STAR){
+        var s = starLevel[i];
+        if(filters[STAR[i]] && c.stars == s)
+          return true;
+      }
+    }
+    
+    return false;
+    
+  }
+  
   return ((c.own && filters.own) || (!c.own && filters.missing)) && filters[c.type.type];
 }
 
