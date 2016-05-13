@@ -445,7 +445,7 @@ function getRequiredLevels(type){
     for(var i in clothes){
         var cloth = clothes[i];
         var num = calRel(cloth.type.mainType+'-'+cloth.id);
-        if(num==0)
+        if(num<=0)
             continue;
        
         var rS = cloth.source.rawSource;
