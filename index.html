@@ -317,6 +317,14 @@
       Nikki's wardrobe.<br/>
       Based On Ivangift's  <a href="http://ivangift.github.io/nikkiup2u3/">Nikkiup2u3 website</a>
     </div>
+    <div id='modeSelector'>
+      <span>模式：</span>
+      <input class="nice" type="radio" name="boost" id="boostStandard" value="standard" onClick="changeBoost(1)" checked/>
+          <label for="boostStandard"> 普通模式</label>
+      <input class="nice" type="radio" name="boost" id="boostExtreme" value="boostExtreme" onClick="changeBoost(2)" />
+          <label for="boostExtreme">过关模式</label>    
+      
+    </div>
     <div id='filtersTop'>
       <form name="filter_form">
         <div>
@@ -342,7 +350,9 @@
     </div>
     <hr>
     <div id="chapterSelector">
-           <select id="chapter" onchange="changeChapter()" style="display: none"></select>
+          <input type="radio" name="levelType" value="main" onClick="changeLevelType" /> 少女级
+          <input type="radio" name="levelType" value="princess" onClick="changeLevelType" checked/> 公主级
+          <select id="chapter" onchange="changeChapter()"></select>
     </div>
     <hr>
     <div id='category_container'> 
