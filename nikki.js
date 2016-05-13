@@ -490,7 +490,7 @@ function passMode(flag){
   var categoryDiv = $("#category_container")[0];
   filtersDiv.hidden = flag;
   categoryDiv.hidden = flag;
-  passDiv.hidden = !falg;
+  passDiv.hidden = !flag;
   
   
 }
