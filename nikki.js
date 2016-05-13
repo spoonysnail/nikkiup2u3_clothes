@@ -505,6 +505,10 @@ function passMode(flag){
  function changeChapter(){
     drawTable(requiredLevels($("input[name='levelType']:checked").val(),$("select[id='chapter']").val()),"clothes");
  }
+ 
+ function changeLevelType(){
+    drawTable(requiredLevels($("input[name='levelType']:checked").val(),$("select[id='chapter']").val()),"clothes");
+ }
 
 function drawChapter() {
     var dropdown = $("#chapter")[0];
