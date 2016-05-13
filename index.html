@@ -332,10 +332,11 @@
     <hr/>
     <div id='modeSelector'>
       <span>模式：</span>
-      <input class="nice" type="radio" id="mode" value="general" onClick="passMode(false)" checked/>
-          <label for="general"> 普通模式</label>
-      <input class="nice" type="radio"id="mode" value="pass" onClick="passMode(true)" />
-          <label for="pass">过关模式</label>    
+         <input class="nice" type="radio" name="boost" id="boostStandard" value="standard" onclick="passMode(false)" checked="">
+          <label for="boostStandard">普通模式</label>
+          <input class="nice" type="radio" name="boost" id="boostExtreme" value="boostExtreme" onclick="passMode(true)">
+          <label for="boostExtreme">过关模式</label>
+      
       
     </div>
     <div id='filtersTop'>
