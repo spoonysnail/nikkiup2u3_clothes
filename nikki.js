@@ -484,6 +484,16 @@ function moreLink(cate) {
   return link;
 }
 
+function drawChapter() {
+  var dropdown = $("#chapter")[0];
+  var def = document.createElement('option');
+  var chapterArr = new Array("一", "二", "三", "四", "五", "六", "七", "八", "九","十" ,"十一","十二","十三");
+  for (var i in chapterArr) {
+    var option = document.createElement('option');
+    option.text = chapterArr[i];
+    option.value = i+1;
+    dropdown.add(option);
+  }
 
 function init() {
   var mine = loadFromStorage();
