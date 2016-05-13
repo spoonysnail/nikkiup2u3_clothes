@@ -320,9 +320,9 @@
     <hr/>
     <div id='modeSelector'>
       <span>模式：</span>
-      <input class="nice" type="radio" name="boost" id="boostStandard" value="standard" onClick="changeBoost(1)" checked/>
+      <input class="nice" type="radio" name="boost" id="boostStandard" value="standard" onClick="passMode(false)" checked/>
           <label for="boostStandard"> 普通模式</label>
-      <input class="nice" type="radio" name="boost" id="boostExtreme" value="boostExtreme" onClick="changeBoost(2)" />
+      <input class="nice" type="radio" name="boost" id="boostExtreme" value="boostExtreme" onClick="passMode(true)" />
           <label for="boostExtreme">过关模式</label>    
       
     </div>
@@ -349,10 +349,9 @@
         </div>
       </form>
     </div>
-    <hr>
-    <div id="chapterSelector">
-          <input type="radio" name="levelType" value="main" onClick="changeLevelType" /> 少女级
-          <input type="radio" name="levelType" value="princess" onClick="changeLevelType" checked/> 公主级
+    <div id="chapterSelector" hidden=true>
+          <input type="radio" name="levelType" value="main" onClick="changeLevelType()" /> 少女级
+          <input type="radio" name="levelType" value="princess" onClick="changeLevelType()" checked/> 公主级
           <select id="chapter" onchange="changeChapter()"></select>
     </div>
     <hr>
