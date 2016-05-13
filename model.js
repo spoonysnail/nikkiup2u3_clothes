@@ -438,6 +438,54 @@ function calRel(source){
     res -= haveNum;
     return res;
 }
+function filtering(criteria, filters) {
+  var result = [];
+  for (var i in clothes) {
+    if (matches(clothes[i], criteria, filters)) {
+      result.push(clothes[i]);
+    }
+  }
+  if (global.isFilteringMode) {
+    result.sort(byId);
+  } else {
+    result.sort(byCategoryAndScore);
+  } 
+  return result;
+}
+
+function requiredLevels(type,chapter){
+    var result = [];
+    var ret = {};
+    for(var i in clothes){
+        var cloth = clothes[i];
+        var num = calRel(cloth.type.mainType+'-'+cloth.id);
+        if(num<=0)
+            continue;
+       
+        var rS = cloth.source.rawSource;
+        var sourceArr = [];
+
+        for(var s in cloth.source.sources){
+            var cs =cloth.source.sources[s];
+            if(cs.indexOf('-')>0 && cs.indexOf(type)>0 && cs.split('-')[0]==chapter){
+                var l = cs.split('-')[1].split(type)[0];
+                if(!ret[l])
+                  ret[l] = [];
+                ret[l].push(clothes[i]);
+            }
+        }
+        
+      
+    }
+
+    for(var i in ret){
+        for(var l in ret[i]){
+          result.push(ret[i][l]);
+        }
+    }
+
+    return result;
+}
 
 //获取公主级或者少女级还需要刷的关卡
 function getRequiredLevels(type){
@@ -467,8 +515,7 @@ function getRequiredLevels(type){
                 ret[p]={};
             if(!ret[p][q])
                 ret[p][q]=[];
-            ret[p][q].push(cloth.name);
-            ret[p][q].push(num);
+            ret[p][q].push(cloth);
         }
     }
     return ret;
