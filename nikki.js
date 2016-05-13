@@ -20,6 +20,7 @@ var global = {
   boostType: 1,
 };
 
+
 // for table use
 function thead() {
   var ret = "<tr>";
@@ -239,7 +240,7 @@ function onChangeDecompose() {
 var STAR = ["oneS", "twoS", "threeS", "fourS", "fiveS","sixS"];
 var starLevel =['1','2','3','4','5','6'];
 function refreshTable(criteria) {
-  drawTable(filtering(criteria, uiFilter,decomposeFilter,starFilter), "clothes", false, null);
+  drawTable(filtering(criteria, uiFilter,decomposeFilter,starFilter), "clothes");
 }
 
 function filtering(criteria, uifilters,decomposefilters,starfilters) {
@@ -498,7 +499,8 @@ function passMode(flag){
 }
 
  function changeChapter(){
-   
+    var type = '公';
+    drawTable(requiredLevels(type,"11"),"clothes");
  }
 
 function drawChapter() {
@@ -508,7 +510,7 @@ function drawChapter() {
     for (var i in chapterArr) {
         var option = document.createElement('option');
         option.text = "第"+chapterArr[i]+"章";
-        option.value = i+1;
+        option.value = (int)i+1;
         dropdown.add(option);
     }
 }
