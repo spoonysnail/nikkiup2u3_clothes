@@ -510,7 +510,7 @@ function drawChapter() {
     for (var i in chapterArr) {
         var option = document.createElement('option');
         option.text = "第"+chapterArr[i]+"章";
-        option.value = (int)i+1;
+        option.value = parseInt(i)+1;
         dropdown.add(option);
     }
 }
