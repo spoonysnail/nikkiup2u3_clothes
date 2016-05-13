@@ -62,8 +62,12 @@ function inventoryCheckbox(type, id, own) {
 function toggleInventory(type, id) {
   var checked = !clothesSet[type][id].own;
   clothesSet[type][id].own = checked;
+  clothesSet[type][id].have = checked?1:0;
   $('#clickable-' + type + id).toggleClass('own');
+
   saveAndUpdate();
+  refreshTable(criteria);
+
 }
 
 
@@ -491,9 +495,11 @@ function passMode(flag){
   filtersDiv.hidden = flag;
   categoryDiv.hidden = flag;
   passDiv.hidden = !flag;
-  
-  
 }
+
+ function changeChapter(){
+   
+ }
 
 function drawChapter() {
     var dropdown = $("#chapter")[0];
