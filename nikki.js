@@ -496,11 +496,14 @@ function passMode(flag){
   filtersDiv.hidden = flag;
   categoryDiv.hidden = flag;
   passDiv.hidden = !flag;
+  if(flag)
+    changeChapter();
+  else
+    switchCate(currentCategory);
 }
 
  function changeChapter(){
-    var type = '公';
-    drawTable(requiredLevels(type,"11"),"clothes");
+    drawTable(requiredLevels($("input[name='levelType']:checked").val(),$("select[id='chapter']").val()),"clothes");
  }
 
 function drawChapter() {
