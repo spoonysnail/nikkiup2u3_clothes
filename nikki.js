@@ -484,6 +484,17 @@ function moreLink(cate) {
   return link;
 }
 
+function passMode(flag){
+  var filtersDiv = $("#filtersTop")[0];
+  var passDiv = $("#chapterSelector")[0];
+  var categoryDiv = $("#category_container")[0];
+  filtersDiv.hidden = flag;
+  categoryDiv.hidden = flag;
+  passDiv.hidden = !falg;
+  
+  
+}
+
 function drawChapter() {
     var dropdown = $("#chapter")[0];
     var def = document.createElement('option');
