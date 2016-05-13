@@ -20,6 +20,7 @@ var global = {
   boostType: 1,
 };
 
+var isPassMode = false;
 
 // for table use
 function thead() {
@@ -240,7 +241,11 @@ function onChangeDecompose() {
 var STAR = ["oneS", "twoS", "threeS", "fourS", "fiveS","sixS"];
 var starLevel =['1','2','3','4','5','6'];
 function refreshTable(criteria) {
-  drawTable(filtering(criteria, uiFilter,decomposeFilter,starFilter), "clothes");
+  if(!isPassMode)
+    drawTable(filtering(criteria, uiFilter,decomposeFilter,starFilter), "clothes");
+  else
+    drawTable(requiredLevels($("input[name='levelType']:checked").val(),$("select[id='chapter']").val()),"clothes");
+
 }
 
 function filtering(criteria, uifilters,decomposefilters,starfilters) {
@@ -490,6 +495,7 @@ function moreLink(cate) {
 }
 
 function passMode(flag){
+  isPassMode = flag;
   var filtersDiv = $("#filtersTop")[0];
   var passDiv = $("#chapterSelector")[0];
   var categoryDiv = $("#category_container")[0];
