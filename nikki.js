@@ -515,10 +515,14 @@ function init() {
   switchCate(category[0]);
   updateSize(mine);
   drawChapter();
+  var passDiv = $("#chapterSelector")[0];
+  passDiv.hidden = true;
+  
   global.float = $('table.mainTable');
   global.float.floatThead({
     useAbsolutePositioning: false
   });
+  
 }
 $(document).ready(function() {
   init()
