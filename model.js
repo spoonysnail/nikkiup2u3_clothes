@@ -412,6 +412,7 @@ var relInfoSet = function(){
     
     return ret;
 }();
+
 //计算总共所需source个数
 function calRel(source){
     var sourceCate = source.split('-')[0];
@@ -436,6 +437,41 @@ function calRel(source){
     
     res -= haveNum;
     return res;
+}
+
+//获取公主级或者少女级还需要刷的关卡
+function getRequiredLevels(type){
+    var ret = {};
+    for(var i in clothes){
+        var cloth = clothes[i];
+        var num = calRel(cloth.type.mainType+'-'+cloth.id);
+        if(num==0)
+            continue;
+       
+        var rS = cloth.source.rawSource;
+        var sourceArr = [];
+
+        for(var s in cloth.source.sources){
+            var cs =cloth.source.sources[s];
+            if(cs.indexOf('-')>0 && cs.indexOf(type)>0){
+                sourceArr.push(cs);
+            }
+        }
+
+        for(var sa in sourceArr){
+            var source =sourceArr[sa];
+            var p = source.split('-')[0];
+            var q = source.split('-')[1].split(type)[0];
+            var arr = sa.split(/[type,-]/);
+            if(!ret[p])
+                ret[p]={};
+            if(!ret[p][q])
+                ret[p][q]=[];
+            ret[p][q].push(cloth.name);
+            ret[p][q].push(num);
+        }
+    }
+    return ret;
 }
 
 
