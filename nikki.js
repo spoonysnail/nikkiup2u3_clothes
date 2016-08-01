@@ -504,7 +504,7 @@ function changeView(){
   filtersDiv.hidden = isCollectMode;
   categoryDiv.hidden = isCollectMode;
   passDiv.hidden = !isPassMode;
-  collectDiv.hidden = !(isCollectMode && !passMode);
+  collectDiv.hidden = !(isCollectMode && !isPassMode);
   
   if(!isCollectMode)
     switchCate(currentCategory);
