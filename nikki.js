@@ -121,7 +121,7 @@ function row(piece) {
    +cate+ "\",\"" + csv[1] + "\") value=' " + haveNum + "'\></td>";
     
   var res= calRel(cate+'-'+csv[1]);
-  var require = res>0?res:0;
+  var require = res>=0?res:0;
   var consume = res<0?-res:0;
   ret += td(require,'requireNum');
   ret += td(consume,'consumeNum');
