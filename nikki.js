@@ -21,7 +21,7 @@ var global = {
 };
 
 var isPassMode = false;
-
+var isCollectMode = false;
 // for table use
 function thead() {
   var ret = "<tr>";
@@ -241,11 +241,12 @@ function onChangeDecompose() {
 var STAR = ["oneS", "twoS", "threeS", "fourS", "fiveS","sixS"];
 var starLevel =['1','2','3','4','5','6'];
 function refreshTable(criteria) {
-  if(!isPassMode)
+  if(!isCollectMode)
     drawTable(filtering(criteria, uiFilter,decomposeFilter,starFilter), "clothes");
+  else if (isPassMode)
+    changeChapterOrLevelType();
   else
-    drawTable(requiredLevels($("input[name='levelType']:checked").val(),$("select[id='chapter']").val()),"clothes");
-
+    changeCollectType();
 }
 
 function filtering(criteria, uifilters,decomposefilters,starfilters) {
@@ -494,27 +495,42 @@ function moreLink(cate) {
   return link;
 }
 
-function passMode(flag){
-  isPassMode = flag;
+function changeView(){
   var filtersDiv = $("#filtersTop")[0];
   var passDiv = $("#chapterSelector")[0];
   var categoryDiv = $("#category_container")[0];
-  filtersDiv.hidden = flag;
-  categoryDiv.hidden = flag;
-  passDiv.hidden = !flag;
-  if(flag)
-    changeChapter();
-  else
+  filtersDiv.hidden = isCollectMode;
+  categoryDiv.hidden = isCollectMode;
+  passDiv.hidden = !isPassMode;
+  collectDiv.hidden = !isCollectMode;
+  
+  if(!isCollectMode)
     switchCate(currentCategory);
+  else if (isPassMode)
+    changeChapterOrLevelType();
+  else
+    changeCollecttType();
 }
 
- function changeChapter(){
+function passMode(flag){
+  isPassMode = flag;
+  if(isPassMode)
+    isCollectMode = true;
+}
+
+
+ function collectMode(flag){
+    isCollectMode = flag;
+}
+
+ function changeCollectType(){
+    drawTable(getCollectList($("input[name='tagType']:checked").val()),"clothes");
+ }
+
+ function changeChapterOrLevelType(){
     drawTable(requiredLevels($("input[name='levelType']:checked").val(),$("select[id='chapter']").val()),"clothes");
  }
- 
- function changeLevelType(){
-    drawTable(requiredLevels($("input[name='levelType']:checked").val(),$("select[id='chapter']").val()),"clothes");
- }
+
 
 function drawChapter() {
     var dropdown = $("#chapter")[0];
@@ -528,6 +544,19 @@ function drawChapter() {
     }
 }
 
+function drawCollectType() {
+    var dropdown = $("#collectType")[0];
+    var def = document.createElement('option');
+    var typeArr = new Array("店·金币","店·钻石","浪·迷","浪·幻", "兑·花园", "浪·缥缈", "兑·仙履", "设·重构");
+    for (var i in chapterArr) {
+        var option = document.createElement('option');
+        option.text = chapterArr[i];
+        option.value = chapterArr[i];
+        dropdown.add(option);
+    }
+}
+
+
 function init() {
   var mine = loadFromStorage();
   calcDependencies();
@@ -536,8 +565,12 @@ function init() {
   switchCate(category[0]);
   updateSize(mine);
   drawChapter();
+  drawCollectType();
   var passDiv = $("#chapterSelector")[0];
   passDiv.hidden = true;
+  
+  var collectDiv = $("#collectTypeSelector")[0];
+  collectDiv.hidden = true;
   
   global.float = $('table.mainTable');
   global.float.floatThead({
