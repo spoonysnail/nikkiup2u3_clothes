@@ -504,7 +504,7 @@ function changeView(){
   filtersDiv.hidden = isCollectMode;
   categoryDiv.hidden = isCollectMode;
   passDiv.hidden = !isPassMode;
-  collectDiv.hidden = !isCollectMode;
+  collectDiv.hidden = !(isCollectMode && !passMode);
   
   if(!isCollectMode)
     switchCate(currentCategory);
@@ -529,7 +529,7 @@ function passMode(flag){
 }
 
  function changeCollectType(){
-    drawTable(getCollectList($("input[name='tagType']:checked").val()),"clothes");
+    drawTable(getCollectList($("input[name='collectType']:checked").val()),"clothes");
  }
 
  function changeChapterOrLevelType(){
