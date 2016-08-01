@@ -518,11 +518,14 @@ function passMode(flag){
   isPassMode = flag;
   if(isPassMode)
     isCollectMode = true;
+  changeView();
 }
 
 
  function collectMode(flag){
     isCollectMode = flag;
+    changeView();
+
 }
 
  function changeCollectType(){
