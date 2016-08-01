@@ -522,3 +522,28 @@ function getRequiredLevels(type){
 }
 
 
+function getCollectList(type){
+    var ret = [];
+    for(var i in clothes){
+        var cloth = clothes[i];
+        var num = calRel(cloth.type.mainType+'-'+cloth.id);
+        if(num<=0)
+            continue;
+        //console.log('as')
+        var rS = cloth.source.rawSource;
+        var sourceArr = [];
+        for(var s in cloth.source.sources){
+            var cs =cloth.source.sources[s];
+            //console.log(cs.indexOf(type));
+            
+            if(cs.indexOf('·')>=0 && cs.indexOf(type)>=0){
+                console.log('dasda')
+                ret.push(cloth);
+                continue;
+            }
+        }
+        
+    }
+    return ret;
+}
+
