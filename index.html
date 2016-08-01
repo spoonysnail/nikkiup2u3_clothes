@@ -332,7 +332,7 @@
     <hr/>
     <div id='modeSelector'>
       <span>模式：</span>
-         <input class="nice" type="radio" name="boost" id="general" value="general" onclick="passMode(false)" checked="">
+         <input class="nice" type="radio" name="boost" id="general" value="general" onclick="collectMode(false)" checked="">
           <label for="general">普通模式</label>
           <input class="nice" type="radio" name="boost" id="pass" value="pass" onclick="passMode(true)">
           <label for="pass">过关收集模式</label>
@@ -364,10 +364,14 @@
       </form>
     </div>
     <div id="chapterSelector" >
-          <input type="radio" name="levelType" value="少" onClick="changeLevelType()" /> 少女级
-          <input type="radio" name="levelType" value="公" onClick="changeLevelType()" checked/> 公主级
-          <select id="chapter" onchange="changeChapter()"></select>
+          <input type="radio" name="levelType" value="少" onClick="changeChapterOrLevelType()" /> 少女级
+          <input type="radio" name="levelType" value="公" onClick="changeChapterOrLevelType()" checked/> 公主级
+          <select id="chapter" onchange="changeChapterOrLevelType()"></select>
     </div>
+    <div id="collectTypeSelector" >
+          <select id="collectType" onchange="changeCollectType()"></select>
+    </div>
+    
     <hr>
     <div id='category_container'> 
     </div>
