@@ -499,6 +499,8 @@ function changeView(){
   var filtersDiv = $("#filtersTop")[0];
   var passDiv = $("#chapterSelector")[0];
   var categoryDiv = $("#category_container")[0];
+  var collectDiv = $("#collectTypeSelector")[0];
+
   filtersDiv.hidden = isCollectMode;
   categoryDiv.hidden = isCollectMode;
   passDiv.hidden = !isPassMode;
@@ -548,10 +550,10 @@ function drawCollectType() {
     var dropdown = $("#collectType")[0];
     var def = document.createElement('option');
     var typeArr = new Array("店·金币","店·钻石","浪·迷","浪·幻", "兑·花园", "浪·缥缈", "兑·仙履", "设·重构");
-    for (var i in chapterArr) {
+    for (var i in typeArr) {
         var option = document.createElement('option');
-        option.text = chapterArr[i];
-        option.value = chapterArr[i];
+        option.text = typeArr[i];
+        option.value = typeArr[i];
         dropdown.add(option);
     }
 }
