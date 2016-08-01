@@ -516,16 +516,14 @@ function changeView(){
 
 function passMode(flag){
   isPassMode = flag;
-  if(isPassMode)
-    isCollectMode = true;
+  isCollectMode = true;
   changeView();
 }
 
 
  function collectMode(flag){
     isCollectMode = flag;
-    if(!isCollectMode)
-      isPassMode = false;
+    isPassMode = false;
     changeView();
 
 }
