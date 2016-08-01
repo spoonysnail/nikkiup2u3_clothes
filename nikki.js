@@ -524,6 +524,8 @@ function passMode(flag){
 
  function collectMode(flag){
     isCollectMode = flag;
+    if(!isCollectMode)
+      isPassMode = false;
     changeView();
 
 }
