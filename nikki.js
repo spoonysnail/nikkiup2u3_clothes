@@ -511,7 +511,7 @@ function changeView(){
   else if (isPassMode)
     changeChapterOrLevelType();
   else
-    changeCollecttType();
+    changeCollectType();
 }
 
 function passMode(flag){
